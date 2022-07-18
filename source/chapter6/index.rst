@@ -6,6 +6,7 @@
 .. toctree::
    :maxdepth: 4
    
+   setupenv.rst
    lab6_1_goals.rst
    lab6_2_1_exercises.rst
    lab6_2_2_files.rst

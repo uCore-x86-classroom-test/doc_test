@@ -1,6 +1,21 @@
 编译简单的 C 程序
 =================
 
+
+.. toctree::
+   :hidden:
+   :maxdepth: 4
+
+   lab0_2_3_1_2_att_asm.rst
+   lab0_2_3_1_3_gcc_inline_asm.rst
+   lab0_2_3_1_4_extend_gcc_asm.rst
+   lab0_2_3_1_gcc_usage.rst
+   lab0_2_3_2_make_makefile.rst
+   lab0_2_3_3_gdb.rst
+   lab0_2_3_4_further.rst
+   lab0_2_3_tools.rst
+
+
 C 语言经典的入门例子是 Hello World，下面是一示例代码：
 
 ::

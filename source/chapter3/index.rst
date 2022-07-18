@@ -9,6 +9,7 @@ Fault异常处理和FIFO页替换算法的实现。实验原理最大的区别�
 .. toctree::
    :maxdepth: 4
 
+   setupenv.rst
    lab3_1_goals.rst
    lab3_2_1_exercises.rst
    lab3_2_2_files.rst

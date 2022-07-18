@@ -1,6 +1,7 @@
 了解OS实验
 ==========
 
+
 写一个操作系统难吗？别被现在上百万行的Linux和Windows操作系统吓倒。当年Thompson乘他老婆带着小孩度假留他一人在家时，写了UNIX；当年Linus还是一个21岁大学生时完成了Linux雏形。站在这些巨人的肩膀上，我们能否也尝试一下做“巨人”的滋味呢？
 
 MIT的Frans Kaashoek等在2006年参考PDP-11上的UNIX Version

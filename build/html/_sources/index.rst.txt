@@ -7,7 +7,7 @@ uCore-Tutorial-Guide 2022 Spring
 ==================================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Part1 - Just do it!
    :hidden:
    

@@ -9,6 +9,7 @@
 .. toctree::
    :maxdepth: 4
 
+   setupenv.rst
    lab2_3_1_phymemlab_goal.rst
    lab2_3_2_1_phymemlab_exercise.rst
    lab2_3_2_2_phymemlab_files.rst

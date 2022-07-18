@@ -1,6 +1,16 @@
 设置实验环境
 ============
 
+
+.. toctree::
+   :hidden:
+   :maxdepth: 4
+
+   lab0_2_2_1_lab_steps.rst
+   lab0_2_2_2_vm_experiment.rst
+   lab0_2_2_3_install.rst
+
+
 我们参考了MIT的xv6、Harvard的OS161和Linux等设计了ucore
 OS实验，所有OS实验需在Linux下运行。对于经验不足的同学，推荐参考“通过虚拟机使用Linux实验环境”一节用虚拟机方式进行试验。
 >

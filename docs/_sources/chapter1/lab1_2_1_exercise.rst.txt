@@ -1,6 +1,20 @@
 练习
 ====
 
+
+
+.. toctree::
+   :maxdepth: 4
+   :hidden:
+   
+   lab1_2_1_1_ex1.rst
+   lab1_2_1_2_ex2.rst
+   lab1_2_1_2_ex3.rst
+   lab1_2_1_2_ex4.rst
+   lab1_2_1_2_ex5.rst
+   lab1_2_1_2_ex6.rst
+
+
 为了实现lab1的目标，lab1提供了6个基本练习和1个扩展练习，要求完成实验报告。
 
 对实验报告的要求： - 基于markdown格式来完成，以文本方式为主。 -
