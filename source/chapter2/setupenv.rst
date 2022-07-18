@@ -18,15 +18,15 @@ classroom配置
 
    6.获取自动测试脚本以及环境配置脚本sh setup.sh
 
-   6.配置实验运行环境ubuntu环境下执行make setupenv 
+   6.配置实验运行环境(安装qemu以及gcc)  ubuntu环境下执行make setupenv
    
-   7. **重要** 
+   7.在github codespace中需要手动安装gcc
 
    在github codespace环境中请手动把下面内容添加到 /etc/apt/sources.list
 
-   deb http://dk.archive.ubuntu.com/ubuntu/ xenial main 
-
-	deb http://dk.archive.ubuntu.com/ubuntu/ xenial universe
+   deb http://dk.archive.ubuntu.com/ubuntu/ xenial main
+   
+   deb http://dk.archive.ubuntu.com/ubuntu/ xenial universe
 
    然后执行 
 

@@ -425,15 +425,11 @@
 <p>4.在你的实验练习的网页的中上部可以看到一个醒目的code绿色按钮，点击后，可以进一步看到 codespace 标签和醒目的create codesapce on main绿色按钮。请点击这个绿色按钮，就可以进入到在线的ubuntu + vscode环境中。</p>
 <p>5.进入到实验分支 git checkout labx</p>
 <p>6.获取自动测试脚本以及环境配置脚本sh setup.sh</p>
-<p>6.配置实验运行环境ubuntu环境下执行make setupenv</p>
-<ol class="arabic simple" start="7">
-<li><p><strong>重要</strong></p></li>
-</ol>
+<p>6.配置实验运行环境(安装qemu以及gcc)  ubuntu环境下执行make setupenv</p>
+<p>7.在github codespace中需要手动安装gcc</p>
 <p>在github codespace环境中请手动把下面内容添加到 /etc/apt/sources.list</p>
 <p>deb <a class="reference external" href="http://dk.archive.ubuntu.com/ubuntu/">http://dk.archive.ubuntu.com/ubuntu/</a> xenial main</p>
-<blockquote>
-<div><p>deb <a class="reference external" href="http://dk.archive.ubuntu.com/ubuntu/">http://dk.archive.ubuntu.com/ubuntu/</a> xenial universe</p>
-</div></blockquote>
+<p>deb <a class="reference external" href="http://dk.archive.ubuntu.com/ubuntu/">http://dk.archive.ubuntu.com/ubuntu/</a> xenial universe</p>
 <p>然后执行</p>
 <p>sudo apt update</p>
 <p>sudo apt install -y gcc-4.8</p>
