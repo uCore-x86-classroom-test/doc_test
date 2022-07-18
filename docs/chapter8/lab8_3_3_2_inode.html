@@ -1,0 +1,378 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" />
+
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+        <title>索引节点 - uCore-Tutorial-Guide-2022S 0.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/my_style.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">uCore-Tutorial-Guide-2022S 0.1 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">uCore-Tutorial-Guide-2022S 0.1 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=搜索 name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="id1">
+<h1>索引节点<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
+<p>在SFS文件系统中，需要记录文件内容的存储位置以及文件名与文件内容的对应关系。sfs_disk_inode记录了文件或目录的内容存储的索引信息，该数据结构在硬盘里储存，需要时读入内存。sfs_disk_entry表示一个目录中的一个文件或目录，包含该项所对应inode的位置和文件名，同样也在硬盘里储存，需要时读入内存。</p>
+<p><strong>磁盘索引节点</strong></p>
+<p>SFS中的磁盘索引节点代表了一个实际位于磁盘上的文件。首先我们看看在硬盘上的索引节点的内容：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>struct sfs_disk_inode {
+    uint32_t size;                              如果inode表示常规文件，则size是文件大小
+    uint16_t type;                                  inode的文件类型
+    uint16_t nlinks;                               此inode的硬链接数
+    uint32_t blocks;                              此inode的数据块数的个数
+    uint32_t direct[SFS_NDIRECT];                此inode的直接数据块索引值（有SFS_NDIRECT个）
+    uint32_t indirect;                            此inode的一级间接数据块索引值
+};
+</pre></div>
+</div>
+<p>通过上表可以看出，如果inode表示的是文件，则成员变量direct[]直接指向了保存文件内容数据的数据块索引值。indirect间接指向了保存文件内容数据的数据块，indirect指向的是间接数据块（indirect
+block），此数据块实际存放的全部是数据块索引，这些数据块索引指向的数据块才被用来存放文件内容数据。</p>
+<p>默认的，ucore 里 SFS_NDIRECT 是 12，即直接索引的数据页大小为 12 * 4k =
+48k；当使用一级间接数据块索引时，ucore 支持最大的文件大小为 12 * 4k +
+1024 * 4k = 48k + 4m。数据索引表内，0 表示一个无效的索引，inode 里
+blocks 表示该文件或者目录占用的磁盘的 block 的个数。indiret 为 0
+时，表示不使用一级索引块。（因为 block 0 用来保存 super
+block，它不可能被其他任何文件或目录使用，所以这么设计也是合理的）。</p>
+<p>对于普通文件，索引值指向的 block
+中保存的是文件中的数据。而对于目录，索引值指向的数据保存的是目录下所有的文件名以及对应的索引节点所在的索引块（磁盘块）所形成的数组。数据结构如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">file</span> <span class="n">entry</span> <span class="p">(</span><span class="n">on</span> <span class="n">disk</span><span class="p">)</span> <span class="o">*/</span>
+<span class="n">struct</span> <span class="n">sfs_disk_entry</span> <span class="p">{</span>
+    <span class="n">uint32_t</span> <span class="n">ino</span><span class="p">;</span>                                   <span class="n">索引节点所占数据块索引值</span>
+    <span class="n">char</span> <span class="n">name</span><span class="p">[</span><span class="n">SFS_MAX_FNAME_LEN</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>               <span class="n">文件名</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>操作系统中，每个文件系统下的 inode 都应该分配唯一的 inode 编号。SFS
+下，为了实现的简便（偷懒），每个 inode 直接用他所在的磁盘 block
+的编号作为 inode 编号。比如，root block 的 inode 编号为 1；每个
+sfs_disk_entry 数据结构中，name 表示目录下文件或文件夹的名称，ino
+表示磁盘 block 编号，通过读取该 block
+的数据，能够得到相应的文件或文件夹的 inode。ino 为0时，表示一个无效的
+entry。</p>
+<p>此外，和 inode 相似，每个 sfs_dirent_entry 也占用一个 block。</p>
+<p><strong>内存中的索引节点</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">inode</span> <span class="k">for</span> <span class="n">sfs</span> <span class="o">*/</span>
+<span class="n">struct</span> <span class="n">sfs_inode</span> <span class="p">{</span>
+    <span class="n">struct</span> <span class="n">sfs_disk_inode</span> <span class="o">*</span><span class="n">din</span><span class="p">;</span>                     <span class="o">/*</span> <span class="n">on</span><span class="o">-</span><span class="n">disk</span> <span class="n">inode</span> <span class="o">*/</span>
+    <span class="n">uint32_t</span> <span class="n">ino</span><span class="p">;</span>                                   <span class="o">/*</span> <span class="n">inode</span> <span class="n">number</span> <span class="o">*/</span>
+    <span class="n">uint32_t</span> <span class="n">flags</span><span class="p">;</span>                                 <span class="o">/*</span> <span class="n">inode</span> <span class="n">flags</span> <span class="o">*/</span>
+    <span class="nb">bool</span> <span class="n">dirty</span><span class="p">;</span>                                     <span class="o">/*</span> <span class="n">true</span> <span class="k">if</span> <span class="n">inode</span> <span class="n">modified</span> <span class="o">*/</span>
+    <span class="nb">int</span> <span class="n">reclaim_count</span><span class="p">;</span>                              <span class="o">/*</span> <span class="n">kill</span> <span class="n">inode</span> <span class="k">if</span> <span class="n">it</span> <span class="n">hits</span> <span class="n">zero</span> <span class="o">*/</span>
+    <span class="n">semaphore_t</span> <span class="n">sem</span><span class="p">;</span>                                <span class="o">/*</span> <span class="n">semaphore</span> <span class="k">for</span> <span class="n">din</span> <span class="o">*/</span>
+    <span class="n">list_entry_t</span> <span class="n">inode_link</span><span class="p">;</span>                        <span class="o">/*</span> <span class="n">entry</span> <span class="k">for</span> <span class="n">linked</span><span class="o">-</span><span class="nb">list</span> <span class="ow">in</span> <span class="n">sfs_fs</span> <span class="o">*/</span>
+    <span class="n">list_entry_t</span> <span class="n">hash_link</span><span class="p">;</span>                         <span class="o">/*</span> <span class="n">entry</span> <span class="k">for</span> <span class="nb">hash</span> <span class="n">linked</span><span class="o">-</span><span class="nb">list</span> <span class="ow">in</span> <span class="n">sfs_fs</span> <span class="o">*/</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>可以看到SFS中的内存inode包含了SFS的硬盘inode信息，而且还增加了其他一些信息，这属于是便于进行是判断否改写、互斥操作、回收和快速地定位等作用。需要注意，一个内存inode是在打开一个文件后才创建的，如果关机则相关信息都会消失。而硬盘inode的内容是保存在硬盘中的，只是在进程需要时才被读入到内存中，用于访问文件或目录的具体内容数据</p>
+<p>为了方便实现上面提到的多级数据的访问以及目录中 entry 的操作，对 inode
+SFS实现了一些辅助的函数：</p>
+<ol class="arabic simple">
+<li><p>sfs_bmap_load_nolock：将对应 sfs_inode 的第 index 个索引指向的 block
+的索引值取出存到相应的指针指向的单元（ino_store）。该函数只接受 index
+&lt;= inode-&gt;blocks 的参数。当 index == inode-&gt;blocks
+时，该函数理解为需要为 inode 增长一个 block。并标记 inode 为
+dirty（所有对 inode 数据的修改都要做这样的操作，这样，当 inode
+不再使用的时候，sfs 能够保证 inode
+数据能够被写回到磁盘）。sfs_bmap_load_nolock 调用的
+sfs_bmap_get_nolock 来完成相应的操作，阅读
+sfs_bmap_get_nolock，了解他是如何工作的。（sfs_bmap_get_nolock 只由
+sfs_bmap_load_nolock 调用）</p></li>
+<li><p>sfs_bmap_truncate_nolock：将多级数据索引表的最后一个 entry
+释放掉。他可以认为是 sfs_bmap_load_nolock 中，index == inode-&gt;blocks
+的逆操作。当一个文件或目录被删除时，sfs 会循环调用该函数直到
+inode-&gt;blocks 减为 0，释放所有的数据页。函数通过 sfs_bmap_free_nolock
+来实现，他应该是 sfs_bmap_get_nolock 的逆操作。和 sfs_bmap_get_nolock
+一样，调用 sfs_bmap_free_nolock 也要格外小心。</p></li>
+<li><p>sfs_dirent_read_nolock：将目录的第 slot 个 entry
+读取到指定的内存空间。他通过上面提到的函数来完成。</p></li>
+<li><p>sfs_dirent_search_nolock：是常用的查找函数。他在目录下查找
+name，并且返回相应的搜索结果（文件或文件夹）的 inode
+的编号（也是磁盘编号），和相应的 entry 在该目录的 index
+编号以及目录下的数据页是否有空闲的 entry。（SFS
+实现里文件的数据页是连续的，不存在任何空洞；而对于目录，数据页不是连续的，当某个
+entry 删除的时候，SFS 通过设置 entry-&gt;ino 为0将该 entry 所在的 block
+标记为 free，在需要添加新 entry 的时候，SFS 优先使用这些 free 的
+entry，其次才会去在数据页尾追加新的 entry。</p></li>
+</ol>
+<p>注意，这些后缀为 nolock 的函数，只能在已经获得相应 inode
+的semaphore才能调用。</p>
+<p><strong>Inode的文件操作函数</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>static const struct inode_ops sfs_node_fileops = {
+    .vop_magic                      = VOP_MAGIC,
+    .vop_open                       = sfs_openfile,
+    .vop_close                      = sfs_close,
+    .vop_read                       = sfs_read,
+    .vop_write                      = sfs_write,
+    ……
+};
+</pre></div>
+</div>
+<p>上述sfs_openfile、sfs_close、sfs_read和sfs_write分别对应用户进程发出的open、close、read、write操作。其中sfs_openfile不用做什么事；sfs_close需要把对文件的修改内容写回到硬盘上，这样确保硬盘上的文件内容数据是最新的；sfs_read和sfs_write函数都调用了一个函数sfs_io，并最终通过访问硬盘驱动来完成对文件内容数据的读写。</p>
+<p><strong>Inode的目录操作函数</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>static const struct inode_ops sfs_node_dirops = {
+    .vop_magic                      = VOP_MAGIC,
+    .vop_open                       = sfs_opendir,
+    .vop_close                      = sfs_close,
+    .vop_getdirentry                = sfs_getdirentry,
+    .vop_lookup                     = sfs_lookup,
+    ……
+};
+</pre></div>
+</div>
+<p>对于目录操作而言，由于目录也是一种文件，所以sfs_opendir、sys_close对应户进程发出的open、close函数。相对于sfs_open，sfs_opendir只是完成一些open函数传递的参数判断，没做其他更多的事情。目录的close操作与文件的close操作完全一致。由于目录的内容数据与文件的内容数据不同，所以读出目录的内容数据的函数是sfs_getdirentry，其主要工作是获取目录下的文件inode信息。</p>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, CL
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script kind="utterances">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addUtterances = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://utteranc.es/client.js";
+    script.async = "async";
+
+    script.setAttribute("repo", "LearningOS/uCore-Tutorial-Guide-2022S");
+    script.setAttribute("issue-term", "pathname");
+    script.setAttribute("theme", "github-light");
+    script.setAttribute("label", "comments");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.section");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addUtterances);
+</script>
+    <script src="../_static/translations.js"></script>
+    </body>
+</html>

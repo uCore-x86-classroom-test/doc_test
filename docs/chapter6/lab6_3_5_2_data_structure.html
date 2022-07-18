@@ -1,0 +1,339 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" />
+
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+        <title>数据结构 - uCore-Tutorial-Guide-2022S 0.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/my_style.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">uCore-Tutorial-Guide-2022S 0.1 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">uCore-Tutorial-Guide-2022S 0.1 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=搜索 name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="id1">
+<h1>数据结构<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
+<p>在理解框架之前，需要先了解一下调度器框架所需要的数据结构。</p>
+<ul class="simple">
+<li><p>通常的操作系统中，进程池是很大的（虽然在 ucore 中，MAX_PROCESS
+很小）。在 ucore 中，调度器引入
+run-queue（简称rq,即运行队列）的概念，通过链表结构管理进程。</p></li>
+<li><p>由于目前 ucore
+设计运行在单CPU上，其内部只有一个全局的运行队列，用来管理系统内全部的进程。</p></li>
+<li><p>运行队列通过链表的形式进行组织。链表的每一个节点是一个list_entry_t,每个list_entry_t
+又对应到了 struct proc_struct *,这其间的转换是通过宏 le2proc 来完成
+的。具体来说，我们知道在 struct proc_struct 中有一个叫 run_link 的
+list_entry_t，因此可以通过偏移量逆向找到对因某个 run_list的 struct
+proc_struct。即进程结构指针 proc = le2proc(链表节点指针, run_link)。</p></li>
+<li><p>为了保证调度器接口的通用性，ucore调度框架定义了如下接口，该接口中，几乎全部成员变量均为函数指针。具体的功能会在后面的框架说明中介绍。</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span>   <span class="n">struct</span> <span class="n">sched_class</span> <span class="p">{</span>
+<span class="mi">2</span>       <span class="o">//</span> <span class="n">调度器的名字</span>
+<span class="mi">3</span>       <span class="n">const</span> <span class="n">char</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+<span class="mi">4</span>       <span class="o">//</span> <span class="n">初始化运行队列</span>
+<span class="mi">5</span>       <span class="n">void</span> <span class="p">(</span><span class="o">*</span><span class="n">init</span><span class="p">)</span> <span class="p">(</span><span class="n">struct</span> <span class="n">run_queue</span> <span class="o">*</span><span class="n">rq</span><span class="p">);</span>
+<span class="mi">6</span>       <span class="o">//</span> <span class="n">将进程</span> <span class="n">p</span> <span class="n">插入队列</span> <span class="n">rq</span>
+<span class="mi">7</span>       <span class="n">void</span> <span class="p">(</span><span class="o">*</span><span class="n">enqueue</span><span class="p">)</span> <span class="p">(</span><span class="n">struct</span> <span class="n">run_queue</span> <span class="o">*</span><span class="n">rq</span><span class="p">,</span> <span class="n">struct</span> <span class="n">proc_struct</span> <span class="o">*</span><span class="n">p</span><span class="p">);</span>
+<span class="mi">8</span>       <span class="o">//</span> <span class="n">将进程</span> <span class="n">p</span> <span class="n">从队列</span> <span class="n">rq</span> <span class="n">中删除</span>
+<span class="mi">9</span>       <span class="n">void</span> <span class="p">(</span><span class="o">*</span><span class="n">dequeue</span><span class="p">)</span> <span class="p">(</span><span class="n">struct</span> <span class="n">run_queue</span> <span class="o">*</span><span class="n">rq</span><span class="p">,</span> <span class="n">struct</span> <span class="n">proc_struct</span> <span class="o">*</span><span class="n">p</span><span class="p">);</span>
+<span class="mi">10</span>      <span class="o">//</span> <span class="n">返回</span> <span class="n">运行队列</span> <span class="n">中下一个可执行的进程</span>
+<span class="mi">11</span>      <span class="n">struct</span> <span class="n">proc_struct</span><span class="o">*</span> <span class="p">(</span><span class="o">*</span><span class="n">pick_next</span><span class="p">)</span> <span class="p">(</span><span class="n">struct</span> <span class="n">run_queue</span> <span class="o">*</span><span class="n">rq</span><span class="p">);</span>
+<span class="mi">12</span>      <span class="o">//</span> <span class="n">timetick</span> <span class="n">处理函数</span>
+<span class="mi">13</span>      <span class="n">void</span> <span class="p">(</span><span class="o">*</span><span class="n">proc_tick</span><span class="p">)(</span><span class="n">struct</span>  <span class="n">run_queue</span><span class="o">*</span> <span class="n">rq</span><span class="p">,</span> <span class="n">struct</span> <span class="n">proc_struct</span><span class="o">*</span> <span class="n">p</span><span class="p">);</span>
+<span class="mi">14</span>  <span class="p">};</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>此外，proc.h 中的 struct proc_struct 中也记录了一些调度相关的信息：</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>1   struct proc_struct {
+2       // . . .
+3       // 该进程是否需要调度，只对当前进程有效
+4       volatile bool need_resched;
+5       // 该进程的调度链表结构，该结构内部的连接组成了 运行队列 列表
+6       list_entry_t run_link;
+7       // 该进程剩余的时间片，只对当前进程有效
+8       int time_slice;
+9       // round-robin 调度器并不会用到以下成员
+10      // 该进程在优先队列中的节点，仅在 LAB6 使用
+11      skew_heap_entry_t  lab6_run_pool;
+12      // 该进程的调度优先级，仅在 LAB6 使用
+13      uint32_t lab6_priority;
+14      // 该进程的调度步进值，仅在 LAB6 使用
+15      uint32_t lab6_stride;
+16  };
+</pre></div>
+</div>
+<p>在此次实验中，你需要了解
+default_sched.c中的实现RR调度算法的函数。在该文件中，你可以看到ucore
+已经为 RR 调度算法创建好了一个名为 RR_sched_class 的调度策略类。</p>
+<p>通过数据结构 struct run_queue 来描述完整的
+run_queue（运行队列）。它的主要结构如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>1   struct run_queue {
+2       //其运行队列的哨兵结构，可以看作是队列头和尾
+3       list_entry_t run_list;
+4       //优先队列形式的进程容器，只在 LAB6 中使用
+5       skew_heap_entry_t  *lab6_run_pool;
+6       //表示其内部的进程总数
+7       unsigned int proc_num;
+8       //每个进程一轮占用的最多时间片
+9       int max_time_slice;
+10  };
+</pre></div>
+</div>
+<p>在 ucore
+框架中，运行队列存储的是当前可以调度的进程，所以，只有状态为runnable的进程才能够进入运行队列。当前正在运行的进程并不会在运行队列中，这一点需要注意。</p>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, CL
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script kind="utterances">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addUtterances = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://utteranc.es/client.js";
+    script.async = "async";
+
+    script.setAttribute("repo", "LearningOS/uCore-Tutorial-Guide-2022S");
+    script.setAttribute("issue-term", "pathname");
+    script.setAttribute("theme", "github-light");
+    script.setAttribute("label", "comments");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.section");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addUtterances);
+</script>
+    <script src="../_static/translations.js"></script>
+    </body>
+</html>

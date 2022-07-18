@@ -1,0 +1,414 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" />
+
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+        <title>GCC扩展内联汇编 - uCore-Tutorial-Guide-2022S 0.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/my_style.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">uCore-Tutorial-Guide-2022S 0.1 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">uCore-Tutorial-Guide-2022S 0.1 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=搜索 name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="gcc">
+<h1>GCC扩展内联汇编<a class="headerlink" href="#gcc" title="Permalink to this heading">#</a></h1>
+<p>使用GCC扩展内联汇编的例子如下：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define read_cr0() ({ \</span>
+<span class="cp">unsigned int __dummy; \</span>
+<span class="cp">__asm__( \</span>
+<span class="cp">    &quot;movl %%cr0,%0\n\t&quot; \</span>
+<span class="cp">    :&quot;=r&quot; (__dummy)); \</span>
+<span class="cp">__dummy; \</span>
+<span class="cp">})</span>
+</pre></div>
+</div>
+<p>它代表什么含义呢？这需要从其基本格式讲起。GCC扩展内联汇编的基本格式是：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">asm</span><span class="w"> </span><span class="p">[</span><span class="k">volatile</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">Assembler</span><span class="w"> </span><span class="n">Template</span><span class="w"></span>
+<span class="w">   </span><span class="o">:</span><span class="w"> </span><span class="n">Output</span><span class="w"> </span><span class="n">Operands</span><span class="w"></span>
+<span class="w">   </span><span class="p">[</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Input</span><span class="w"> </span><span class="n">Operands</span><span class="w"></span>
+<span class="w">   </span><span class="p">[</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Clobbers</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">])</span><span class="w"></span>
+</pre></div>
+</div>
+<p>其中，__asm__ 表示汇编代码的开始，其后可以跟
+__volatile__（这是可选项），其含义是避免 “asm”
+指令被删除、移动或组合，在执行代码时，如果不希望汇编语句被 gcc
+优化而改变位置，就需要在 asm 符号后添加 volatile 关键词：asm
+volatile(…)；或者更详细地说明为：__asm__
+__volatile__(…)；然后就是小括弧，括弧中的内容是具体的内联汇编指令代码。
+“” 为汇编指令部分，例如，“movl
+%%cr0,%0:raw-latex:<cite>n</cite>。数字前加前缀
+“％“，如％1，％2等表示使用寄存器的样板操作数。可以使用的操作数总数取决于具体CPU中通用寄存器的数
+量，如Intel可以有8个。指令中有几个操作数，就说明有几个变量需要与寄存器结合，由gcc在编译时根据后面输出部分和输入部分的约束条件进行相应的处理。由于这些样板操作数的前缀使用了”％“，因此，在用到具体的寄存器时就在前面加<strong>两个“％”</strong>，如<strong>%%cr0</strong>。输出部分（output
+operand
+list），用以规定对输出变量（目标操作数）如何与寄存器结合的约束（constraint）,输出部分可以有多个约束，互相以逗号分开。每个约束以“＝”开头，接着用一个字母来表示操作数的类型，然后是关于变量结合的约束。例如，上例中：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">:</span><span class="s2">&quot;=r&quot;</span> <span class="p">(</span><span class="n">__dummy</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>“＝r”表示相应的目标操作数（指令部分的%0）可以使用任何一个通用寄存器，并且变量__dummy
+存放在这个寄存器中，但如果是：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>:“＝m”(__dummy)
+</pre></div>
+</div>
+<p>“＝m”就表示相应的目标操作数是存放在内存单元__dummy中。表示约束条件的字母很多，下表给出几个主要的约束字母及其含义：</p>
+<table><tr><td><p>字母</p>
+</td><td><p>含义</p>
+</td></tr><tr><td><p>m, v, o</p>
+</td><td><p>内存单元</p>
+</td></tr><tr><td><p>R</p>
+</td><td><p>任何通用寄存器</p>
+</td></tr><tr><td><p>Q</p>
+</td><td><p>寄存器eax, ebx, ecx,edx之一</p>
+</td></tr><tr><td><p>I, h</p>
+</td><td><p>直接操作数</p>
+</td></tr><tr><td><p>E, F</p>
+</td><td><p>浮点数</p>
+</td></tr><tr><td><p>G</p>
+</td><td><p>任意</p>
+</td></tr><tr><td><p>a, b, c, d</p>
+</td><td><p>寄存器eax/ax/al, ebx/bx/bl, ecx/cx/cl或edx/dx/dl</p>
+</td></tr><tr><td><p>S, D</p>
+</td><td><p>寄存器esi或edi</p>
+</td></tr><tr><td><p>I</p>
+</td><td><p>常数（0～31）</p>
+</td></tr></table><p>输入部分（input operand
+list）：输入部分与输出部分相似，但没有“＝”。如果输入部分一个操作数所要求使用的寄存器，与前面输出部分某个约束所要求的是同一个寄存器，那就把对应操作数的编号（如“1”，“2”等）放在约束条件中。在后面的例子中，可看到这种情况。修改部分（clobber
+list,也称
+乱码列表）:这部分常常以“memory”为约束条件，以表示操作完成后内存中的内容已有改变，如果原来某个寄存器的内容来自内存，那么现在内存中这个单元的内容已经改变。乱码列表通知编译器，有些寄存器或内存因内联汇编块造成乱码，可隐式地破坏了条件寄存器的某些位（字段）。
+注意，指令部分为必选项，而输入部分、输出部分及修改部分为可选项，当输入部分存在，而输出部分不存在时，冒号“：”要保留，当“memory”存在时，三个冒号都要保留，例如</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#define __cli() __asm__ __volatile__(&quot;cli&quot;: : :&quot;memory&quot;)</span>
+</pre></div>
+</div>
+<p>下面是一个例子：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">asm</span><span class="p">(</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;cld </span><span class="se">\n\t</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;rep </span><span class="se">\n\t</span><span class="s">&quot;</span><span class="w"></span>
+<span class="w">        </span><span class="s">&quot;stosl&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;c&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">count</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;a&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="s">&quot;D&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">buf</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>得到的主要汇编代码为：</p>
+<div class="highlight-x86asm notranslate"><div class="highlight"><pre><span></span>movl count,%ecx
+movl value,%eax
+movl buf,%edi
+#APP
+cld
+rep
+stosl
+#NO_APP
+</pre></div>
+</div>
+<p>cld,rep,stos这几条语句的功能是向buf中写上count个value值。冒号后的语句指明输入，输出和被改变的寄存器。通过冒号以后的语句，编译器就知道你的指令需要和改变哪些寄存器，从而可以优化寄存器的分配。其中符号“c”(count)指示要把count的值放入ecx寄存器。类似的还有：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>a eax
+b ebx
+c ecx
+d edx
+S esi
+D edi
+I 常数值，(0 - 31)
+q,r 动态分配的寄存器
+g eax,ebx,ecx,edx或内存变量
+A 把eax和edx合成一个64位的寄存器(use long longs)
+</pre></div>
+</div>
+<p>也可以让gcc自己选择合适的寄存器。如下面的例子：</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">asm</span><span class="p">(</span><span class="s">&quot;leal (%1,%1,4),%0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;=r&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>这段代码到的主要汇编代码为：</p>
+<div class="highlight-x86asm notranslate"><div class="highlight"><pre><span></span>movl x,%eax
+#APP
+leal (%eax,%eax,4),%eax
+#NO_APP
+movl %eax,x
+</pre></div>
+</div>
+<p>几点说明：</p>
+<ul class="simple">
+<li><p>[1] 使用q指示编译器从eax, ebx, ecx, edx分配寄存器。
+使用r指示编译器从eax, ebx, ecx, edx, esi, edi分配寄存器。</p></li>
+<li><p>[2]
+不必把编译器分配的寄存器放入改变的寄存器列表，因为寄存器已经记住了它们。</p></li>
+<li><p>[3] “=”是标示输出寄存器，必须这样用。</p></li>
+<li><p>[4]
+数字%n的用法：数字表示的寄存器是按照出现和从左到右的顺序映射到用“r”或“q”请求的寄存器．如果要重用“r”或“q”请求的寄存器的话，就可以使用它们。</p></li>
+<li><p>[5] 如果强制使用固定的寄存器的话，如不用%1，而用ebx，则：</p></li>
+</ul>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">asm</span><span class="p">(</span><span class="s">&quot;leal (%%ebx,%%ebx,4),%0&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;=r&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>注意要使用两个%,因为一个%的语法已经被%n用掉了。</p>
+</div></blockquote>
+<p>参考： - <a class="reference external" href="https://gcc.gnu.org/onlinedocs/gcc.pdf">GCC Manual， 版本为5.0.0 pre-release,6.43节（How to Use Inline
+Assembly Language in C
+Code）</a> -
+<a class="reference external" href="http://www.ibiblio.org/gferg/ldp/GCC-Inline-Assembly-HOWTO.html">GCC-Inline-Assembly-HOWTO</a></p>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, CL
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script kind="utterances">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addUtterances = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://utteranc.es/client.js";
+    script.async = "async";
+
+    script.setAttribute("repo", "LearningOS/uCore-Tutorial-Guide-2022S");
+    script.setAttribute("issue-term", "pathname");
+    script.setAttribute("theme", "github-light");
+    script.setAttribute("label", "comments");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.section");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addUtterances);
+</script>
+    <script src="../_static/translations.js"></script>
+    </body>
+</html>

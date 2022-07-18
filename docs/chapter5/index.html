@@ -1,0 +1,550 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" /><link rel="next" title="用户进程管理" href="lab5_3_user_process.html" /><link rel="prev" title="附录A：实验四的参考输出如下：" href="../chapter4/lab4_5_appendix_a.html" />
+
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+        <title>实验五：用户进程管理 - uCore-Tutorial-Guide-2022S 0.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/my_style.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">uCore-Tutorial-Guide-2022S 0.1 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">uCore-Tutorial-Guide-2022S 0.1 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=搜索 name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Part1 - Just do it!</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter0/index.html">实验零：操作系统实验准备</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_2_1_lab_steps.html">开发OS lab实验的简单步骤</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_4_2_ucore_make.html">ucore 代码编译</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_2_qemu_usage.html">使用硬件模拟器QEMU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_1_2_linux_source_install.html">Linux环境下的源码级安装过程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html">UNIX general info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#building-or-reading-a-small-os">building or reading a small OS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#some-os-course">some OS course</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#x86-emulation">x86 Emulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#x86-assembly-language">x86 Assembly Language</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#multiprocessor-references">Multiprocessor references:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#x86">x86系统结构与编程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#general-bios-and-pc-bootstrap">General BIOS and PC bootstrap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#vga-display-console-c">VGA display - console.c</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#programmable-interval-timer-pit">8253/8254 Programmable Interval Timer (PIT)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#a-programmable-interrupt-controller-pic">8259/8259A Programmable Interrupt Controller (PIC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#uart-serial-port">16550 UART Serial Port</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#ieee-1284-parallel-port">IEEE 1284 Parallel Port</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-resource.html#ide-hard-drive-controller">IDE hard drive controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_5_cpu_hardware.html">了解处理器硬件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_6_ucore_programming.html">了解ucore编程方法和通用数据结构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_1_about_labs.html">了解OS实验</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_3_4_further.html">进一步的相关内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_1_goals.html">实验目的：</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_5_2_intel_80386_mem.html">Intel 80386内存架构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_6_1_oop.html">面向对象编程方法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_2_environment.html">设置实验环境</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_4_1_make_obj.html">编译可调试的目标文件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_2_3_1_softwares.html">实验中可能使用的软件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_3_3_gdb.html">gdb使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_3_3_gdb.html#id1">gdb调试实例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_3_1_2_att_asm.html">AT&amp;T汇编基本语法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_4_gdb_qemu_debug_ucore.html">结合gdb和qemu源码级调试ucore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_3_1_1_compile_c_prog.html">编译简单的 C 程序</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_4_5_load_debug_target.html">加载调试目标</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_2_2_vm_experiment.html">通过虚拟机使用Linux实验环境（推荐：最容易的实验环境安装方法）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_3_1_3_gcc_inline_asm.html">GCC基本内联汇编</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_2_1_qemu_runtime_arguments.html">运行参数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_debug_with_emulator.html">基于硬件模拟器实现源码级调试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_1_install_qemu.html">安装硬件模拟器QEMU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_3_2_make_makefile.html">make和Makefile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_3_1_gcc_usage.html">gcc的基本用法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_3_qemu_debug_ucore.html">基于qemu内建模式调试ucore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_1_2_2_configure_make_install_qemu.html">配置、编译和安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_1_1_linux_runtime.html">Linux运行环境</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_2_3_install.html">安装使用Linux实验环境（适合希望自己安装Linux系统的同学）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_6_2_1_linked_list.html">双向循环链表</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_3_1_4_extend_gcc_asm.html">GCC扩展内联汇编</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_4_4_gdb_config_file.html">使用gdb配置文件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_5_3_intel_80386_registers.html">Intel 80386寄存器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-tools.html">ucore实验中的常用工具</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_ref_ucore-tools.html#id1">上述工具的使用方法在线信息</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_3_tools.html">了解编程开发调试的基本工具</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_6_2_generic_data_structure.html">通用数据结构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_5_1_intel_80386_modes.html">Intel 80386运行模式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_4_3_remote_debug.html">使用远程调试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_2_2_qemu_monitor_debug.html">常用调试命令</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_prepare.html">准备知识</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_4_6_set_debug_arch.html">设定调试目标架构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter0/lab0_2_4_1_2_1_patch_qemu.html">获得并应用修改</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter1/index.html">实验一：系统软件启动过程</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_1_goals.html">实验目的：</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_2_3_dist_accessing.html">硬盘访问概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_1_bios_booting.html">BIOS启动过程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_1_bios_booting.html#id1">补充信息</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_4_lab_requirement.html">实验报告要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_2_1_4_ex4.html">练习4：分析bootloader加载ELF格式的OS的过程。（要求在报告中写出分析）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_3_3_lab1_interrupt.html">lab1中对中断的处理实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_3_booting_os.html">操作系统启动过程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_3_2_interrupt_exception.html">中断与异常</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_2_1_5_ex5.html">练习5：实现函数调用堆栈跟踪函数 （需要编程）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_appendix_a20.html">附录“关于A20 Gate”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_2_4_elf.html">ELF文件格式概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_2_1_7_ex7.html">扩展练习 Challenge 1（需要编程）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_2_1_7_ex7.html#challenge-2">扩展练习 Challenge 2（需要编程）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_2_labs.html">实验内容：</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_2_1_exercise.html">练习</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_2_1_2_ex2.html">练习2：使用qemu执行并调试lab1中的软件。（要求在报告中简要写出练习过程）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_booting.html">从机器启动到操作系统运行的过程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_2_bootloader.html">bootloader启动过程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_5_appendix.html">附录“启动后第一条执行的指令”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_2_2_address_space.html">地址空间</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_3_1_function_stack.html">函数堆栈</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_2_1_6_ex6.html">练习6：完善中断初始化和处理 （需要编程）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_2_1_3_ex3.html">练习3：分析bootloader进入保护模式的过程。（要求在报告中写出分析）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_2_2_files.html">项目组成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_3_2_1_protection_mode.html">保护模式和分段机制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter1/lab1_2_1_1_ex1.html">练习1：理解通过make生成执行文件的过程。（要求在报告中写出对下述问题的回答）</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter2/index.html">物理内存管理</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_3_2_search_phymem_layout.html">探测系统物理内存布局</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_3_6_self_mapping.html">自映射机制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_2_1_phymemlab_exercise.html">练习</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_3_4_phymem_allocation.html">物理内存页分配算法实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_3_5_4_maping_relations.html">系统执行中地址映射的三个阶段</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_2_phymemlab_contents.html">实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_3_phymem_manage.html">物理内存管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_3_5_paging.html">实现分页机制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_3_1_phymemlab_overview.html">实验执行流程概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_3_5_2_key_problems_in_seg_page.html">建立段页式管理中需要考虑的关键问题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_2_2_phymemlab_files.html">项目组成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_4_phymemlab_require.html">实验报告要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_3_5_1_segment_and_paging.html">段页式管理基本概念</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter2/lab2_3_1_phymemlab_goal.html">实验目的</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter3/index.html">实验三：虚拟内存管理</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_2_1_exercises.html">练习</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_3_3_data_structures.html">关键数据结构和相关函数分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_1_goals.html">实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_5_2_page_swapping_principles.html">页面置换机制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_2_lab2.html">实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_3_1_vmm_principles.html">基本原理概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_2_2_files.html">项目组成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_3_2_labs_steps.html">实验执行流程概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_3_vmm.html">虚拟内存管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_4_page_fault_handler.html">Page Fault异常处理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_6_labs_requirement.html">实验报告要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_5_swapping.html">页面置换机制的实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter3/lab3_5_1_page_swapping.html">页替换算法</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter4/index.html">实验四：内核线程管理</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_2_2_files.html">项目组成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_3_3_2_create_kthread_initproc.html">创建第 1 个内核线程 initproc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_2_labs.html">实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_4_labs_requirement.html">实验报告要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_3_kernel_thread_management.html">内核线程管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_3_3_1_create_kthread_idleproc.html">创建第 0 个内核线程 idleproc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_3_1_lab_steps.html">实验执行流程概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_3_3_3_sched_run_kthread.html">调度并执行内核线程 initproc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_3_2_pcb.html">设计关键数据结构 – 进程控制块</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_3_3_create_exec_kernel_thread.html">创建并执行内核线程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_1_goals.html">实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_6_appendix_b.html">附录B：【原理】进程的属性与特征解析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_2_1_exercises.html">练习</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter4/lab4_5_appendix_a.html">附录A：实验四的参考输出如下：</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">实验五：用户进程管理</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_user_process.html">用户进程管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_1_lab_steps.html">实验执行流程概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_2_1_exercises.html">练习</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_2_2_files.html">项目组成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_1_goals.html">实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_2_create_user_process.html">创建用户进程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_5_appendix.html">附录 A：【原理】用户进程的特征</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_3_process_exit_wait.html">进程退出和等待进程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_2_lab2.html">实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_4_syscall.html">系统调用实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_4_lab_requirement.html">实验报告要求</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter6/index.html">实验六: 调度器</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_scheduler_design.html">调度框架和调度算法设计与实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_2_1_exercises.html">练习</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_3_process_state.html">进程状态</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_5_2_data_structure.html">数据结构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_4_process_implement.html">进程调度实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_6_2_priority_queue.html">使用优先队列实现 Stride Scheduling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_4_labs_requirement.html">实验报告要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_4_labs_requirement.html#priority">附录：执行 priority大致的显示输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_1_goals.html">实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_4_2_process_switch.html">进程切换过程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_5_4_RR.html">RR 调度算法实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_4_1_kernel_preempt_point.html">内核抢占点</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_2_labs.html">实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_6_stride_scheduling.html">Stride Scheduling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_1_exercises.html">实验执行流程概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_5_scheduler_framework.html">调度框架和调度算法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_2_2_files.html">项目组成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_5_1_designed.html">设计思路</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_5_3_scheduler_point_functions.html">调度点的相关关键函数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter6/lab6_3_6_1_basic_method.html">基本思路</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter7/index.html">实验七：同步互斥</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_3_4_monitors.html">管程和条件变量</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_3_2_3_waitqueue.html">等待队列</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_5_appendix.html">附录：执行 ”make run-matrix”的大致的显示输出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_3_2_synchronization_basic_support.html">同步互斥的底层支撑</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_3_2_1_timer.html">定时器</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_2_1_exercises.html">练习</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_2_labs.html">实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_3_2_2_interrupt.html">屏蔽与使能中断</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_2_2_files.html">项目组成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_3_3_semaphore.html">信号量</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_4_lab_requirement.html">实验报告要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_3_1_experiment.html">实验执行流程概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_1_goals.html">实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter7/lab7_3_synchronization_implement.html">同步互斥的设计与实现</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../chapter8/index.html">实验八：文件系统</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_4_1_file_dir_interface.html">file &amp; dir接口</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_3_sfs.html">Simple FS 文件系统</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_5_2_stdout_dev_file.html">stdout设备文件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_7_file_op_implement.html">文件操作实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_5_1_data_structure.html">关键数据结构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_fs_design_implement.html">文件系统设计与实现</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_2_labs.html">实验内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_4_lab_requirement.html">实验报告要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_7_2_file_read.html">读文件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_3_2_inode.html">索引节点</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_2_1_exercises.html">练习</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_6_labs_steps.html">实验执行流程概述</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_2_fs_interface.html">通用文件系统访问接口</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_7_1_file_open.html">打开文件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_1_goals.html">实验目的</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_5_dev_file_io_layer.html">设备层文件 IO 层</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_4_fs_abstract.html">文件系统抽象层 - VFS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_1_ucore_fs_introduction.html">ucore 文件系统总体介绍</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_5_3_stdin_dev_file.html">stdin 设备文件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_3_1_fs_layout.html">文件系统的布局</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_3_4_2_inode_interface.html">inode 接口</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../chapter8/lab8_2_2_files.html">项目组成</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="id1">
+<h1>实验五：用户进程管理<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="lab5_3_user_process.html">用户进程管理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab5_3_1_lab_steps.html">实验执行流程概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab5_2_1_exercises.html">练习</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab5_2_1_exercises.html#id2">练习0：填写已有实验</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_2_1_exercises.html#id3">练习1: 加载应用程序并执行（需要编码）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_2_1_exercises.html#id4">练习2: 父进程复制自己的内存空间给子进程（需要编码）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_2_1_exercises.html#fork-exec-wait-exit">练习3: 阅读分析源代码，理解进程执行 fork/exec/wait/exit 的实现，以及系统调用的实现（不需要编码）</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_2_1_exercises.html#challenge-copy-on-write-cow">扩展练习 Challenge ：实现 Copy on Write （COW）机制</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lab5_2_2_files.html">项目组成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab5_1_goals.html">实验目的</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab5_3_2_create_user_process.html">创建用户进程</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_2_create_user_process.html#id2">1. 应用程序的组成和编译</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_2_create_user_process.html#id7">2. 用户进程的虚拟地址空间</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_2_create_user_process.html#id8">3. 创建并执行用户进程</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lab5_5_appendix.html">附录 A：【原理】用户进程的特征</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab5_5_appendix.html#id1">从内核线程到用户进程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_5_appendix.html#id2">让用户进程正常运行的用户环境</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_5_appendix.html#id3">用户态进程的执行过程分析</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_5_appendix.html#id4">用户进程的运行状态分析</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lab5_3_3_process_exit_wait.html">进程退出和等待进程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab5_2_lab2.html">实验内容</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lab5_3_4_syscall.html">系统调用实现</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_4_syscall.html#id2">1. 初始化系统调用对应的中断描述符</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_4_syscall.html#id3">2. 建立系统调用的用户库准备</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_4_syscall.html#id4">3. 与用户进程相关的系统调用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lab5_3_4_syscall.html#id5">4. 系统调用的执行过程</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lab5_4_lab_requirement.html">实验报告要求</a></li>
+</ul>
+</div>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="lab5_3_user_process.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">用户进程管理</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../chapter4/lab4_5_appendix_a.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">附录A：实验四的参考输出如下：</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, CL
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script kind="utterances">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addUtterances = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://utteranc.es/client.js";
+    script.async = "async";
+
+    script.setAttribute("repo", "LearningOS/uCore-Tutorial-Guide-2022S");
+    script.setAttribute("issue-term", "pathname");
+    script.setAttribute("theme", "github-light");
+    script.setAttribute("label", "comments");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.section");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addUtterances);
+</script>
+    <script src="../_static/translations.js"></script>
+    </body>
+</html>

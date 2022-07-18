@@ -1,0 +1,434 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" />
+
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+        <title>系统调用实现 - uCore-Tutorial-Guide-2022S 0.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/my_style.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">uCore-Tutorial-Guide-2022S 0.1 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">uCore-Tutorial-Guide-2022S 0.1 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=搜索 name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="id1">
+<h1>系统调用实现<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
+<p>系统调用的英文名字是System
+Call。操作系统为什么需要实现系统调用呢？其实这是实现了用户进程后，自然引申出来需要实现的操作系统功能。用户进程只能在操作系统给它圈定好的“用户环境”中执行，但“用户环境”限制了用户进程能够执行的指令，即用户进程只能执行一般的指令，无法执行特权指令。如果用户进程想执行一些需要特权指令的任务，比如通过网卡发网络包等，只能让操作系统来代劳了。于是就需要一种机制来确保用户进程不能执行特权指令，但能够请操作系统“帮忙”完成需要特权指令的任务，这种机制就是系统调用。</p>
+<p>采用系统调用机制为用户进程提供一个获得操作系统服务的统一接口层，这样一来可简化用户进程的实现，把一些共性的、繁琐的、与硬件相关、与特权指令相关的任务放到操作系统层来实现，但提供一个简洁的接口给用户进程调用；二来这层接口事先可规定好，且严格检查用户进程传递进来的参数和操作系统要返回的数据，使得让操作系统给用户进程服务的同时，保护操作系统不会被用户进程破坏。</p>
+<p>从硬件层面上看，需要硬件能够支持在用户态的用户进程通过某种机制切换到内核态。试验一讲述中断硬件支持和软件处理过程其实就可以用来完成系统调用所需的软硬件支持。下面我们来看看如何在ucore中实现系统调用。</p>
+<section id="id2">
+<h2>1. 初始化系统调用对应的中断描述符<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
+<p>在ucore初始化函数kern_init中调用了idt_init函数来初始化中断描述符表，并设置一个特定中断号的中断门，专门用于用户进程访问系统调用。此事由ide_init函数完成：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span>
+<span class="n">idt_init</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">extern</span> <span class="n">uintptr_t</span> <span class="n">__vectors</span><span class="p">[];</span>
+    <span class="nb">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">idt</span><span class="p">)</span> <span class="o">/</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">struct</span> <span class="n">gatedesc</span><span class="p">);</span> <span class="n">i</span> <span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">SETGATE</span><span class="p">(</span><span class="n">idt</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">GD_KTEXT</span><span class="p">,</span> <span class="n">__vectors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">DPL_KERNEL</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">SETGATE</span><span class="p">(</span><span class="n">idt</span><span class="p">[</span><span class="n">T_SYSCALL</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">GD_KTEXT</span><span class="p">,</span> <span class="n">__vectors</span><span class="p">[</span><span class="n">T_SYSCALL</span><span class="p">],</span> <span class="n">DPL_USER</span><span class="p">);</span>
+    <span class="n">lidt</span><span class="p">(</span><span class="o">&amp;</span><span class="n">idt_pd</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>在上述代码中，可以看到在执行加载中断描述符表lidt指令前，专门设置了一个特殊的中断描述符idt[T_SYSCALL]，它的特权级设置为DPL_USER，中断向量处理地址在__vectors[T_SYSCALL]处。这样建立好这个中断描述符后，一旦用户进程执行“INT
+T_SYSCALL”后，由于此中断允许用户态进程产生（注意它的特权级设置为DPL_USER），所以CPU就会从用户态切换到内核态，保存相关寄存器，并跳转到__vectors[T_SYSCALL]处开始执行，形成如下执行路径：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vector128</span><span class="p">(</span><span class="n">vectors</span><span class="o">.</span><span class="n">S</span><span class="p">)</span><span class="o">--</span>\<span class="o">&gt;</span>
+\<span class="n">_</span>\<span class="n">_alltraps</span><span class="p">(</span><span class="n">trapentry</span><span class="o">.</span><span class="n">S</span><span class="p">)</span><span class="o">--</span>\<span class="o">&gt;</span><span class="n">trap</span><span class="p">(</span><span class="n">trap</span><span class="o">.</span><span class="n">c</span><span class="p">)</span><span class="o">--</span>\<span class="o">&gt;</span><span class="n">trap</span>\<span class="n">_dispatch</span><span class="p">(</span><span class="n">trap</span><span class="o">.</span><span class="n">c</span><span class="p">)</span><span class="o">----</span>\<span class="o">&gt;</span><span class="n">syscall</span><span class="p">(</span><span class="n">syscall</span><span class="o">.</span><span class="n">c</span><span class="p">)</span><span class="o">-</span>
+</pre></div>
+</div>
+<p>在syscall中，根据系统调用号来完成不同的系统调用服务。</p>
+</section>
+<section id="id3">
+<h2>2. 建立系统调用的用户库准备<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h2>
+<p>在操作系统中初始化好系统调用相关的中断描述符、中断处理起始地址等后，还需在用户态的应用程序中初始化好相关工作，简化应用程序访问系统调用的复杂性。为此在用户态建立了一个中间层，即简化的libc实现，在user/libs/ulib.[ch]和user/libs/syscall.[ch]中完成了对访问系统调用的封装。用户态最终的访问系统调用函数是syscall，实现如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">static</span> <span class="n">inline</span> <span class="nb">int</span>
+<span class="n">syscall</span><span class="p">(</span><span class="nb">int</span> <span class="n">num</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">va_list</span> <span class="n">ap</span><span class="p">;</span>
+    <span class="n">va_start</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+    <span class="n">uint32_t</span> <span class="n">a</span><span class="p">[</span><span class="n">MAX_ARGS</span><span class="p">];</span>
+    <span class="nb">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">MAX_ARGS</span><span class="p">;</span> <span class="n">i</span> <span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">va_arg</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span> <span class="n">uint32_t</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">va_end</span><span class="p">(</span><span class="n">ap</span><span class="p">);</span>
+
+    <span class="n">asm</span> <span class="n">volatile</span> <span class="p">(</span>
+        <span class="s2">&quot;int %1;&quot;</span>
+        <span class="p">:</span> <span class="s2">&quot;=a&quot;</span> <span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+        <span class="p">:</span> <span class="s2">&quot;i&quot;</span> <span class="p">(</span><span class="n">T_SYSCALL</span><span class="p">),</span>
+          <span class="s2">&quot;a&quot;</span> <span class="p">(</span><span class="n">num</span><span class="p">),</span>
+          <span class="s2">&quot;d&quot;</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+          <span class="s2">&quot;c&quot;</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+          <span class="s2">&quot;b&quot;</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+          <span class="s2">&quot;D&quot;</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span>
+          <span class="s2">&quot;S&quot;</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+        <span class="p">:</span> <span class="s2">&quot;cc&quot;</span><span class="p">,</span> <span class="s2">&quot;memory&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>从中可以看出，应用程序调用的exit/fork/wait/getpid等库函数最终都会调用syscall函数，只是调用的参数不同而已，如果看最终的汇编代码会更清楚：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>……
+  34:    8b 55 d4               mov    -0x2c(%ebp),%edx
+  37:    8b 4d d8               mov    -0x28(%ebp),%ecx
+  3a:    8b 5d dc                mov    -0x24(%ebp),%ebx
+  3d:    8b 7d e0                mov    -0x20(%ebp),%edi
+  40:    8b 75 e4                mov    -0x1c(%ebp),%esi
+  43:    8b 45 08               mov    0x8(%ebp),%eax
+  46:    cd 80                   int    $0x80
+48: 89 45 f0                mov    %eax,-0x10(%ebp)
+……
+</pre></div>
+</div>
+<p>可以看到其实是把系统调用号放到EAX，其他5个参数a[0]~a[4]分别保存到EDX/ECX/EBX/EDI/ESI五个寄存器中，及最多用6个寄存器来传递系统调用的参数，且系统调用的返回结果是EAX。比如对于getpid库函数而言，系统调用号（SYS_getpid=18）是保存在EAX中，返回值（调用此库函数的的当前进程号pid）也在EAX中。</p>
+</section>
+<section id="id4">
+<h2>3. 与用户进程相关的系统调用<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h2>
+<p>在本实验中，与进程相关的各个系统调用属性如下所示：</p>
+<table><tr><td><p>系统调用名</p>
+</td><td><p>含义</p>
+</td><td><p>具体完成服务的函数</p>
+</td></tr><tr><td><p>SYS_exit</p>
+</td><td><p>process exit</p>
+</td><td><p>do_exit</p>
+</td></tr><tr><td><p>SYS_fork</p>
+</td><td><p>create child process, dup mm</p>
+</td><td><p>do_fork–&gt;wakeup_proc</p>
+</td></tr><tr><td><p>SYS_wait</p>
+</td><td><p>wait child process</p>
+</td><td><p>do_wait</p>
+</td></tr><tr><td><p>SYS_exec</p>
+</td><td><p>after fork, process execute a new program</p>
+</td><td><p>load a program and refresh the mm</p>
+</td></tr><tr><td><p>SYS_yield</p>
+</td><td><p>process flag itself need resecheduling</p>
+</td><td><p>proc-&gt;need_sched=1, then scheduler will rescheule this process</p>
+</td></tr><tr><td><p>SYS_kill</p>
+</td><td><p>kill process</p>
+</td><td><p>do_kill–&gt;proc-&gt;flags |= PF_EXITING, –&gt;wakeup_proc–&gt;do_wait–&gt;do_exit</p>
+</td></tr><tr><td><p>SYS_getpid</p>
+</td><td><p>get the process’s pid</p>
+</td><td></td></tr></table><p>通过这些系统调用，可方便地完成从进程/线程创建到退出的整个运行过程。</p>
+</section>
+<section id="id5">
+<h2>4. 系统调用的执行过程<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h2>
+<p>与用户态的函数库调用执行过程相比，系统调用执行过程的有四点主要的不同：</p>
+<ul class="simple">
+<li><p>不是通过“CALL”指令而是通过“INT”指令发起调用；</p></li>
+<li><p>不是通过“RET”指令，而是通过“IRET”指令完成调用返回；</p></li>
+<li><p>当到达内核态后，操作系统需要严格检查系统调用传递的参数，确保不破坏整个系统的安全性；</p></li>
+<li><p>执行系统调用可导致进程等待某事件发生，从而可引起进程切换；</p></li>
+</ul>
+<p>下面我们以getpid系统调用的执行过程大致看看操作系统是如何完成整个执行过程的。当用户进程调用getpid函数，最终执行到“INT
+T_SYSCALL”指令后，CPU根据操作系统建立的系统调用中断描述符，转入内核态，并跳转到vector128处（kern/trap/vectors.S），开始了操作系统的系统调用执行过程，函数调用和返回操作的关系如下所示：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>vector128(vectors.S)--\&gt;
+\_\_alltraps(trapentry.S)--\&gt;trap(trap.c)--\&gt;trap\_dispatch(trap.c)--
+--\&gt;syscall(syscall.c)--\&gt;sys\_getpid(syscall.c)--\&gt;……--\&gt;\_\_trapret(trapentry.S)
+</pre></div>
+</div>
+<p>在执行trap函数前，软件还需进一步保存执行系统调用前的执行现场，即把与用户进程继续执行所需的相关寄存器等当前内容保存到当前进程的中断帧trapframe中（注意，在创建进程是，把进程的trapframe放在给进程的内核栈分配的空间的顶部）。软件做的工作在vector128和__alltraps的起始部分：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>vectors.S::vector128起始处:
+  pushl $0
+  pushl $128
+......
+trapentry.S::__alltraps起始处:
+pushl %ds
+  pushl %es
+  pushal
+……
+</pre></div>
+</div>
+<p>自此，用于保存用户态的用户进程执行现场的trapframe的内容填写完毕，操作系统可开始完成具体的系统调用服务。在sys_getpid函数中，简单地把当前进程的pid成员变量做为函数返回值就是一个具体的系统调用服务。完成服务后，操作系统按调用关系的路径原路返回到__alltraps中。然后操作系统开始根据当前进程的中断帧内容做恢复执行现场操作。其实就是把trapframe的一部分内容保存到寄存器内容。恢复寄存器内容结束后，调整内核堆栈指针到中断帧的tf_eip处，这是内核栈的结构如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/*</span> <span class="n">below</span> <span class="n">here</span> <span class="n">defined</span> <span class="n">by</span> <span class="n">x86</span> <span class="n">hardware</span> <span class="o">*/</span>
+    <span class="n">uintptr_t</span> <span class="n">tf_eip</span><span class="p">;</span>
+    <span class="n">uint16_t</span> <span class="n">tf_cs</span><span class="p">;</span>
+    <span class="n">uint16_t</span> <span class="n">tf_padding3</span><span class="p">;</span>
+    <span class="n">uint32_t</span> <span class="n">tf_eflags</span><span class="p">;</span>
+<span class="o">/*</span> <span class="n">below</span> <span class="n">here</span> <span class="n">only</span> <span class="n">when</span> <span class="n">crossing</span> <span class="n">rings</span> <span class="o">*/</span>
+    <span class="n">uintptr_t</span> <span class="n">tf_esp</span><span class="p">;</span>
+    <span class="n">uint16_t</span> <span class="n">tf_ss</span><span class="p">;</span>
+    <span class="n">uint16_t</span> <span class="n">tf_padding4</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>这时执行“IRET”指令后，CPU根据内核栈的情况回复到用户态，并把EIP指向tf_eip的值，即“INT
+T_SYSCALL”后的那条指令。这样整个系统调用就执行完毕了。</p>
+<p>至此，实验五中的主要工作描述完毕。</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, CL
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            目录
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">系统调用实现</a><ul>
+<li><a class="reference internal" href="#id2">1. 初始化系统调用对应的中断描述符</a></li>
+<li><a class="reference internal" href="#id3">2. 建立系统调用的用户库准备</a></li>
+<li><a class="reference internal" href="#id4">3. 与用户进程相关的系统调用</a></li>
+<li><a class="reference internal" href="#id5">4. 系统调用的执行过程</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script kind="utterances">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addUtterances = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://utteranc.es/client.js";
+    script.async = "async";
+
+    script.setAttribute("repo", "LearningOS/uCore-Tutorial-Guide-2022S");
+    script.setAttribute("issue-term", "pathname");
+    script.setAttribute("theme", "github-light");
+    script.setAttribute("label", "comments");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.section");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addUtterances);
+</script>
+    <script src="../_static/translations.js"></script>
+    </body>
+</html>

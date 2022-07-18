@@ -1,0 +1,428 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" />
+
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+        <title>UNIX general info - uCore-Tutorial-Guide-2022S 0.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/my_style.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">uCore-Tutorial-Guide-2022S 0.1 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">uCore-Tutorial-Guide-2022S 0.1 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=搜索 name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <p>#参考资料</p>
+<blockquote>
+<div><p>一些资料信息来源于
+<a class="reference external" href="http://pdos.csail.mit.edu/6.828/2014/reference.html">http://pdos.csail.mit.edu/6.828/2014/reference.html</a></p>
+</div></blockquote>
+<section id="unix-general-info">
+<h1>UNIX general info<a class="headerlink" href="#unix-general-info" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=tc4ROCJYbm0">Youtube Unix intro</a></p></li>
+<li><p><a class="reference external" href="http://citeseer.ist.psu.edu/10962.html">The UNIX Time-Sharing
+System</a>, Dennis M. Ritchie
+and Ken L.Thompson,. Bell System Technical Journal 57, number 6, part
+2 (July-August 1978) pages 1905-1930.</p></li>
+<li><p><a class="reference external" href="http://www.read.seas.harvard.edu/~kohler/class/aosref/ritchie84evolution.pdf">The Evolution of the Unix Time-sharing
+System</a>,
+Dennis M. Ritchie, 1979.</p></li>
+<li><p>The C programming language (second edition) by Kernighan and Ritchie.
+Prentice Hall, Inc., 1988. ISBN 0-13-110362-8, 1998.</p></li>
+</ul>
+</section>
+<section id="building-or-reading-a-small-os">
+<h1>building or reading a small OS<a class="headerlink" href="#building-or-reading-a-small-os" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.gitbook.com/book/samypesse/how-to-create-an-operating-system/details">How to make an Operating
+System</a></p></li>
+<li><p><a class="reference external" href="https://www.gitbook.com/book/th0ar/xv6-chinese/details">xv6 book
+中文</a></p></li>
+<li><p><a class="reference external" href="http://item.jd.com/10142246.html">自己动手写操作系统</a>于渊
+著,电子工业出版社,2005</p></li>
+<li><p><a class="reference external" href="http://oldlinux.org/download/clk011c-3.0-toc.pdf">Linux-0.11内核完全注释</a>
+赵炯，2009</p></li>
+<li><p><a class="reference external" href="http://www.oldlinux.org/oldlinux/">oldlinux论坛</a></p></li>
+<li><p><a class="reference external" href="http://wiki.osdev.org/Expanded_Main_Page">osdev.org</a></p></li>
+</ul>
+</section>
+<section id="some-os-course">
+<h1>some OS course<a class="headerlink" href="#some-os-course" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://pdos.csail.mit.edu/6.828/2014/index.html">6.828: Operating Systems Engineering - in
+MIT</a></p></li>
+<li><p><a class="reference external" href="http://pages.cs.wisc.edu/~remzi/Classes/537/Fall2013/">CS-537: Introduction to Operating Systems - in
+WISC</a></p></li>
+</ul>
+</section>
+<section id="x86-emulation">
+<h1>x86 Emulation<a class="headerlink" href="#x86-emulation" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://wiki.qemu.org/Qemu-doc.html">QEMU user manual</a></p></li>
+</ul>
+</section>
+<section id="x86-assembly-language">
+<h1>x86 Assembly Language<a class="headerlink" href="#x86-assembly-language" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.logix.cz/michal/doc/i386/">Intel 80386 Programmer’s Reference Manual, 1987
+(HTML).</a></p></li>
+<li><p><a class="reference external" href="http://www.ibm.com/developerworks/cn/linux/l-assembly/index.html">Linux
+汇编语言开发指南</a></p></li>
+<li><p><a class="reference external" href="http://item.jd.com/10057711.html">汇编语言程序设计</a> 布鲁姆 著,
+马朝晖 等译,机械工业出版社,2005</p></li>
+</ul>
+</section>
+<section id="multiprocessor-references">
+<h1>Multiprocessor references:<a class="headerlink" href="#multiprocessor-references" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://pdos.csail.mit.edu/6.828/2014/readings/ia32/MPspec.pdf">MP
+specification</a></p></li>
+<li><p><a class="reference external" href="http://pdos.csail.mit.edu/6.828/2014/readings/ia32/ioapic.pdf">IO
+APIC</a></p></li>
+</ul>
+</section>
+<section id="x86">
+<h1>x86系统结构与编程<a class="headerlink" href="#x86" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://product.dangdang.com/22915697.html#catalog">微型计算机技术及应用（第4版）</a>
+戴梅萼，史嘉权　编著, 清华大学出版社, 2008</p></li>
+<li><p><a class="reference external" href="http://item.jd.com/11100249.html">x86/x64体系探索及编程</a> 邓志
+著，电子工业出版社，2012</p></li>
+<li><p><a class="reference external" href="http://item.jd.com/11179005.html">x86汇编语言：从实模式到保护模式</a>
+李忠，王晓波，余洁 著，电子工业出版社，2013</p></li>
+</ul>
+</section>
+<section id="general-bios-and-pc-bootstrap">
+<h1>General BIOS and PC bootstrap<a class="headerlink" href="#general-bios-and-pc-bootstrap" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.htl-steyr.ac.at/~morg/pcinfo/hardware/interrupts/inte1at0.htm">BIOS Services and Software
+Interrupts</a>,
+Roger Morgan, 1997.</p></li>
+<li><p><a class="reference external" href="http://pdos.csail.mit.edu/6.828/2014/readings/boot-cdrom.pdf">“El Torito” Bootable CD-ROM Format
+Specification</a>,Phoenix/IBM,
+January 1995.</p></li>
+</ul>
+</section>
+<section id="vga-display-console-c">
+<h1>VGA display - <a class="reference external" href="https://github.com/chyyuu/ucore_lab/blob/master/labcodes/lab1/kern/driver/console.c">console.c</a><a class="headerlink" href="#vga-display-console-c" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://web.archive.org/web/20080302090304/http://www.vesa.org/public/VBE/vbe3.pdf">VESA BIOS Extension (VBE)
+3.0</a>
+September 1998.</p></li>
+<li><p><a class="reference external" href="http://www.osdever.net/FreeVGA/home.htm">Free VGA Project</a> J.D.
+Neal, 1998.</p></li>
+</ul>
+</section>
+<section id="programmable-interval-timer-pit">
+<h1>8253/8254 Programmable Interval Timer (PIT)<a class="headerlink" href="#programmable-interval-timer-pit" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.intel.com/design/archives/periphrl/docs/23124406.htm">82C54 CHMOS Programmable Interval
+Timer,</a>
+, Intel, October 1994.</p></li>
+<li><p><a class="reference external" href="http://www.decisioncards.com/io/tutorials/8254_tut.html">Data Solutions 8253/8254
+Tutorial</a>,
+Data Solutions.</p></li>
+</ul>
+</section>
+<section id="a-programmable-interrupt-controller-pic">
+<h1>8259/8259A Programmable Interrupt Controller (PIC)<a class="headerlink" href="#a-programmable-interrupt-controller-pic" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://pdos.csail.mit.edu/6.828/2014/readings/hardware/8259A.pdf">8259A Programmable Interrupt
+Controller</a>,Intel,
+December 1988.</p></li>
+</ul>
+</section>
+<section id="uart-serial-port">
+<h1>16550 UART Serial Port<a class="headerlink" href="#uart-serial-port" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.national.com/pf/PC/PC16550D.html">PC16550D Universal Asynchronous Receiver/Transmitter with
+FIFOs</a>, National
+Semiconductor, 1995.</p></li>
+<li><p><a class="reference external" href="http://byterunner.com/16550.html">http://byterunner.com/16550.html</a>, Byterunner Technologies.</p></li>
+<li><p><a class="reference external" href="http://www.beyondlogic.org/serial/serial.htm">Interfacing the Serial / RS232
+Port,</a>, Craig
+Peacock, August 2001.</p></li>
+</ul>
+</section>
+<section id="ieee-1284-parallel-port">
+<h1>IEEE 1284 Parallel Port<a class="headerlink" href="#ieee-1284-parallel-port" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://www.lvr.com/parport.htm">Parallel Port Central</a>, Jan
+Axelson.</p></li>
+<li><p><a class="reference external" href="http://www.fapo.com/porthist.htm">Parallel Port Background</a>, Warp
+Nine Engineering.</p></li>
+<li><p><a class="reference external" href="http://zone.ni.com/devzone/cda/tut/p/id/3466">IEEE 1284 - Updating the PC Parallel
+Port</a>, National
+Instruments.</p></li>
+<li><p><a class="reference external" href="http://www.beyondlogic.org/spp/parallel.htm">Interfacing the Standard Parallel
+Port</a>, Craig Peacock,
+August 2001.</p></li>
+</ul>
+</section>
+<section id="ide-hard-drive-controller">
+<h1>IDE hard drive controller<a class="headerlink" href="#ide-hard-drive-controller" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p><a class="reference external" href="http://pdos.csail.mit.edu/6.828/2014/readings/hardware/ATA-d1410r3a.pdf">AT Attachment with Packet Interface - 6 (working
+draft)</a>,
+ANSI, December 2001.</p></li>
+<li><p><a class="reference external" href="http://pdos.csail.mit.edu/6.828/2014/readings/hardware/IDE-BusMaster.pdf">Programming Interface for Bus Master IDE
+Controller</a>,
+Brad Hosler, Intel, May 1994.</p></li>
+<li><p><a class="reference external" href="http://suif.stanford.edu/~csapuntz/ide.html">The Guide to ATA/ATAPI
+documentation</a>,
+Constantine Sapuntzakis, January 2002.</p></li>
+</ul>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, CL
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script kind="utterances">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addUtterances = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://utteranc.es/client.js";
+    script.async = "async";
+
+    script.setAttribute("repo", "LearningOS/uCore-Tutorial-Guide-2022S");
+    script.setAttribute("issue-term", "pathname");
+    script.setAttribute("theme", "github-light");
+    script.setAttribute("label", "comments");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.section");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addUtterances);
+</script>
+    <script src="../_static/translations.js"></script>
+    </body>
+</html>
