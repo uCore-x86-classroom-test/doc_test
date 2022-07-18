@@ -23,6 +23,9 @@ view:
 	make html && firefox build/html/index.html
 
 deploy:
+	@make clean
+	@make html
+	@rm -rf docs
 	@cp -r build/html docs
 	@touch docs/.nojekyll
 	@git add -A
