@@ -6,14 +6,18 @@
 
 .. toctree::
    :maxdepth: 4   
-   
+
    lab0_1_goals.rst
-   lab0_2_1_about_labs.rst
-   lab0_2_2_1_lab_steps.rst
-   lab0_2_2_2_vm_experiment.rst
-   lab0_2_2_3_1_softwares.rst
-   lab0_2_2_3_install.rst
-   lab0_2_2_environment.rst
+
+   .. toctree::
+      :maxdepth: 4
+      lab0_2_1_about_labs.rst
+      lab0_2_2_1_lab_steps.rst
+      lab0_2_2_2_vm_experiment.rst
+      lab0_2_2_3_1_softwares.rst
+      lab0_2_2_3_install.rst
+      lab0_2_2_environment.rst
+      
    lab0_2_3_1_1_compile_c_prog.rst
    lab0_2_3_1_2_att_asm.rst
    lab0_2_3_1_3_gcc_inline_asm.rst
