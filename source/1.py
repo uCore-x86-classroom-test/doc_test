@@ -23,8 +23,12 @@ if __name__ == '__main__':
         os.popen(cmd)
 
 
-aa = os.listdir("source/chapter0")
-
+aa = os.listdir("source/chapter8")
+foo = []
 for i in aa:
     if i.endswith('.rst'):
-        print(i)
+        # print(i)
+        foo.append(i)
+foo = sorted(foo)
+for i in foo:
+    print(i)
