@@ -1,0 +1,334 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" />
+
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+        <title>创建第 1 个内核线程 initproc - uCore-Tutorial-Guide-2022S 0.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/my_style.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">uCore-Tutorial-Guide-2022S 0.1 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">uCore-Tutorial-Guide-2022S 0.1 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=搜索 name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="initproc">
+<h1>创建第 1 个内核线程 initproc<a class="headerlink" href="#initproc" title="Permalink to this heading">#</a></h1>
+<p>第0个内核线程主要工作是完成内核中各个子系统的初始化，然后就通过执行cpu_idle函数开始过退休生活了。所以uCore接下来还需创建其他进程来完成各种工作，但idleproc内核子线程自己不想做，于是就通过调用kernel_thread函数创建了一个内核线程init_main。在实验四中，这个子内核线程的工作就是输出一些字符串，然后就返回了（参看init_main函数）。但在后续的实验中，init_main的工作就是创建特定的其他内核线程或用户进程（实验五涉及）。下面我们来分析一下创建内核线程的函数kernel_thread：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kernel_thread</span><span class="p">(</span><span class="nb">int</span> <span class="p">(</span><span class="o">*</span><span class="n">fn</span><span class="p">)(</span><span class="n">void</span> <span class="o">*</span><span class="p">),</span> <span class="n">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="n">uint32_t</span> <span class="n">clone_flags</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">struct</span> <span class="n">trapframe</span> <span class="n">tf</span><span class="p">;</span>
+    <span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tf</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sizeof</span><span class="p">(</span><span class="n">struct</span> <span class="n">trapframe</span><span class="p">));</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">tf_cs</span> <span class="o">=</span> <span class="n">KERNEL_CS</span><span class="p">;</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">tf_ds</span> <span class="o">=</span> <span class="n">tf_struct</span><span class="o">.</span><span class="n">tf_es</span> <span class="o">=</span> <span class="n">tf_struct</span><span class="o">.</span><span class="n">tf_ss</span> <span class="o">=</span> <span class="n">KERNEL_DS</span><span class="p">;</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">tf_regs</span><span class="o">.</span><span class="n">reg_ebx</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint32_t</span><span class="p">)</span><span class="n">fn</span><span class="p">;</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">tf_regs</span><span class="o">.</span><span class="n">reg_edx</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint32_t</span><span class="p">)</span><span class="n">arg</span><span class="p">;</span>
+    <span class="n">tf</span><span class="o">.</span><span class="n">tf_eip</span> <span class="o">=</span> <span class="p">(</span><span class="n">uint32_t</span><span class="p">)</span><span class="n">kernel_thread_entry</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">do_fork</span><span class="p">(</span><span class="n">clone_flags</span> <span class="o">|</span> <span class="n">CLONE_VM</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tf</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>注意，kernel_thread函数采用了局部变量tf来放置保存内核线程的临时中断帧，并把中断帧的指针传递给do_fork函数，而do_fork函数会调用copy_thread函数来在新创建的进程内核栈上专门给进程的中断帧分配一块空间。</p>
+<p>给中断帧分配完空间后，就需要构造新进程的中断帧，具体过程是：首先给tf进行清零初始化，并设置中断帧的代码段（tf.tf_cs）和数据段(tf.tf_ds/tf_es/tf_ss)为内核空间的段（KERNEL_CS/KERNEL_DS），这实际上也说明了initproc内核线程在内核空间中执行。而initproc内核线程从哪里开始执行呢？tf.tf_eip的指出了是kernel_thread_entry（位于kern/process/entry.S中），kernel_thread_entry是entry.S中实现的汇编函数，它做的事情很简单：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">kernel_thread_entry</span><span class="p">:</span> <span class="c1"># void kernel_thread(void)</span>
+<span class="n">pushl</span> <span class="o">%</span><span class="n">edx</span> <span class="c1"># push arg</span>
+<span class="n">call</span> <span class="o">*%</span><span class="n">ebx</span> <span class="c1"># call fn</span>
+<span class="n">pushl</span> <span class="o">%</span><span class="n">eax</span> <span class="c1"># save the return value of fn(arg)</span>
+<span class="n">call</span> <span class="n">do_exit</span> <span class="c1"># call do_exit to terminate current thread</span>
+</pre></div>
+</div>
+<p>从上可以看出，kernel_thread_entry函数主要为内核线程的主体fn函数做了一个准备开始和结束运行的“壳”，并把函数fn的参数arg（保存在edx寄存器中）压栈，然后调用fn函数，把函数返回值eax寄存器内容压栈，调用do_exit函数退出线程执行。</p>
+<p>do_fork是创建线程的主要函数。kernel_thread函数通过调用do_fork函数最终完成了内核线程的创建工作。下面我们来分析一下do_fork函数的实现（练习2）。do_fork函数主要做了以下6件事情：</p>
+<ol class="arabic simple">
+<li><p>分配并初始化进程控制块（alloc_proc函数）；</p></li>
+<li><p>分配并初始化内核栈（setup_stack函数）；</p></li>
+<li><p>根据clone_flag标志复制或共享进程内存管理结构（copy_mm函数）；</p></li>
+<li><p>设置进程在内核（将来也包括用户态）正常运行和调度所需的中断帧和执行上下文（copy_thread函数）；</p></li>
+<li><p>把设置好的进程控制块放入hash_list和proc_list两个全局进程链表中；</p></li>
+<li><p>自此，进程已经准备好执行了，把进程状态设置为“就绪”态；</p></li>
+<li><p>设置返回码为子进程的id号。</p></li>
+</ol>
+<p>这里需要注意的是，如果上述前3步执行没有成功，则需要做对应的出错处理，把相关已经占有的内存释放掉。copy_mm函数目前只是把current-&gt;mm设置为NULL，这是由于目前在实验四中只能创建内核线程，proc-&gt;mm描述的是进程用户态空间的情况，所以目前mm还用不上。copy_thread函数做的事情比较多，代码如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">static</span> <span class="n">void</span>
+<span class="n">copy_thread</span><span class="p">(</span><span class="n">struct</span> <span class="n">proc_struct</span> <span class="o">*</span><span class="n">proc</span><span class="p">,</span> <span class="n">uintptr_t</span> <span class="n">esp</span><span class="p">,</span> <span class="n">struct</span> <span class="n">trapframe</span> <span class="o">*</span><span class="n">tf</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">//</span><span class="n">在内核堆栈的顶部设置中断帧大小的一块栈空间</span>
+    <span class="n">proc</span><span class="o">-&gt;</span><span class="n">tf</span> <span class="o">=</span> <span class="p">(</span><span class="n">struct</span> <span class="n">trapframe</span> <span class="o">*</span><span class="p">)(</span><span class="n">proc</span><span class="o">-&gt;</span><span class="n">kstack</span> <span class="o">+</span> <span class="n">KSTACKSIZE</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="o">*</span><span class="p">(</span><span class="n">proc</span><span class="o">-&gt;</span><span class="n">tf</span><span class="p">)</span> <span class="o">=</span> <span class="o">*</span><span class="n">tf</span><span class="p">;</span> <span class="o">//</span><span class="n">拷贝在kernel_thread函数建立的临时中断帧的初始值</span>
+    <span class="n">proc</span><span class="o">-&gt;</span><span class="n">tf</span><span class="o">-&gt;</span><span class="n">tf_regs</span><span class="o">.</span><span class="n">reg_eax</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="o">//</span><span class="n">设置子进程</span><span class="o">/</span><span class="n">线程执行完do_fork后的返回值</span>
+    <span class="n">proc</span><span class="o">-&gt;</span><span class="n">tf</span><span class="o">-&gt;</span><span class="n">tf_esp</span> <span class="o">=</span> <span class="n">esp</span><span class="p">;</span> <span class="o">//</span><span class="n">设置中断帧中的栈指针esp</span>
+    <span class="n">proc</span><span class="o">-&gt;</span><span class="n">tf</span><span class="o">-&gt;</span><span class="n">tf_eflags</span> <span class="o">|=</span> <span class="n">FL_IF</span><span class="p">;</span> <span class="o">//</span><span class="n">使能中断</span>
+    <span class="n">proc</span><span class="o">-&gt;</span><span class="n">context</span><span class="o">.</span><span class="n">eip</span> <span class="o">=</span> <span class="p">(</span><span class="n">uintptr_t</span><span class="p">)</span><span class="n">forkret</span><span class="p">;</span>
+    <span class="n">proc</span><span class="o">-&gt;</span><span class="n">context</span><span class="o">.</span><span class="n">esp</span> <span class="o">=</span> <span class="p">(</span><span class="n">uintptr_t</span><span class="p">)(</span><span class="n">proc</span><span class="o">-&gt;</span><span class="n">tf</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>此函数首先在内核堆栈的顶部设置中断帧大小的一块栈空间，并在此空间中拷贝在kernel_thread函数建立的临时中断帧的初始值，并进一步设置中断帧中的栈指针esp和标志寄存器eflags，特别是eflags设置了FL_IF标志，这表示此内核线程在执行过程中，能响应中断，打断当前的执行。执行到这步后，此进程的中断帧就建立好了，对于initproc而言，它的中断帧如下所示：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>//所在地址位置
+initproc-&gt;tf= (proc-&gt;kstack+KSTACKSIZE) – sizeof (struct trapframe);
+//具体内容
+initproc-&gt;tf.tf_cs = KERNEL_CS;
+initproc-&gt;tf.tf_ds = initproc-&gt;tf.tf_es = initproc-&gt;tf.tf_ss = KERNEL_DS;
+initproc-&gt;tf.tf_regs.reg_ebx = (uint32_t)init_main;
+initproc-&gt;tf.tf_regs.reg_edx = (uint32_t) ADDRESS of &quot;Helloworld!!&quot;;
+initproc-&gt;tf.tf_eip = (uint32_t)kernel_thread_entry;
+initproc-&gt;tf.tf_regs.reg_eax = 0;
+initproc-&gt;tf.tf_esp = esp;
+initproc-&gt;tf.tf_eflags |= FL_IF;
+</pre></div>
+</div>
+<p>设置好中断帧后，最后就是设置initproc的进程上下文，（process
+context，也称执行现场）了。只有设置好执行现场后，一旦uCore调度器选择了initproc执行，就需要根据initproc-&gt;context中保存的执行现场来恢复initproc的执行。这里设置了initproc的执行现场中主要的两个信息：上次停止执行时的下一条指令地址context.eip和上次停止执行时的堆栈地址context.esp。其实initproc还没有执行过，所以这其实就是initproc实际执行的第一条指令地址和堆栈指针。可以看出，由于initproc的中断帧占用了实际给initproc分配的栈空间的顶部，所以initproc就只能把栈顶指针context.esp设置在initproc的中断帧的起始位置。根据context.eip的赋值，可以知道initproc实际开始执行的地方在forkret函数（主要完成do_fork函数返回的处理工作）处。至此，initproc内核线程已经做好准备执行了。</p>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, CL
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script kind="utterances">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addUtterances = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://utteranc.es/client.js";
+    script.async = "async";
+
+    script.setAttribute("repo", "LearningOS/uCore-Tutorial-Guide-2022S");
+    script.setAttribute("issue-term", "pathname");
+    script.setAttribute("theme", "github-light");
+    script.setAttribute("label", "comments");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.section");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addUtterances);
+</script>
+    <script src="../_static/translations.js"></script>
+    </body>
+</html>

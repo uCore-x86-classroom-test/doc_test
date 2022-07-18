@@ -1,0 +1,354 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" />
+
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+        <title>系统执行中地址映射的三个阶段 - uCore-Tutorial-Guide-2022S 0.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/my_style.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">uCore-Tutorial-Guide-2022S 0.1 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">uCore-Tutorial-Guide-2022S 0.1 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=搜索 name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="id1">
+<h1>系统执行中地址映射的三个阶段<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h1>
+<p>原理课上讲到了页映射、段映射以及段页式映射关系，但对如何建立段页式映射关系没有详说。其实，在lab1和lab2中都会涉及如何建立映射关系的操作。在lab1中，我们已经碰到到了简单的段映射，即对等映射关系，保证了物理地址和虚拟地址相等，也就是通过建立全局段描述符表，让每个段的基址为0，从而确定了对等映射关系。在lab2中，由于在段地址映射的基础上进一步引入了页地址映射，形成了组合式的段页式地址映射。这种方式虽然更加灵活了，但实现稍微复杂了一些。在lab2中，为了建立正确的地址映射关系，ld在链接阶段生成了ucore
+OS执行代码的虚拟地址，而bootloader与ucore
+OS协同工作，通过在运行时对地址映射的一系列“腾挪转移”，从计算机加电，启动段式管理机制，启动段页式管理机制，在段页式管理机制下运行这整个过程中，虚拟地址到物理地址的映射产生了多次变化，实现了最终的段页式映射关系：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">virt</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">linear</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">phy</span> <span class="n">addr</span> <span class="o">+</span> <span class="mh">0xC0000000</span>
+</pre></div>
+</div>
+<p>下面，我们来看看这是如何一步一步实现的。观察一下链接脚本，即tools/kernel.ld文件在lab1和lab2中的区别。在lab1中：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ENTRY</span><span class="p">(</span><span class="n">kern_init</span><span class="p">)</span>
+
+<span class="n">SECTIONS</span> <span class="p">{</span>
+            <span class="o">/*</span> <span class="n">Load</span> <span class="n">the</span> <span class="n">kernel</span> <span class="n">at</span> <span class="n">this</span> <span class="n">address</span><span class="p">:</span> <span class="s2">&quot;.&quot;</span> <span class="n">means</span> <span class="n">the</span> <span class="n">current</span> <span class="n">address</span> <span class="o">*/</span>
+            <span class="o">.</span> <span class="o">=</span> <span class="mh">0x100000</span><span class="p">;</span>
+
+            <span class="o">.</span><span class="n">text</span> <span class="p">:</span> <span class="p">{</span>
+                       <span class="o">*</span><span class="p">(</span><span class="o">.</span><span class="n">text</span> <span class="o">.</span><span class="n">stub</span> <span class="o">.</span><span class="n">text</span><span class="o">.*</span> <span class="o">.</span><span class="n">gnu</span><span class="o">.</span><span class="n">linkonce</span><span class="o">.</span><span class="n">t</span><span class="o">.*</span><span class="p">)</span>
+            <span class="p">}</span>
+</pre></div>
+</div>
+<p>这意味着在lab1中通过ld工具形成的ucore的起始虚拟地址从0x100000开始，注意：这个地址是虚拟地址。但由于lab1中建立的段地址映射关系为对等关系，所以ucore的物理地址也是从0x100000开始，而ucore的入口函数kern_init的起始地址。所以在lab1中虚拟地址、线性地址以及物理地址之间的映射关系如下：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lab1</span><span class="p">:</span> <span class="n">virt</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">linear</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">phy</span> <span class="n">addr</span>
+</pre></div>
+</div>
+<p>在lab2中：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ENTRY</span><span class="p">(</span><span class="n">kern_entry</span><span class="p">)</span>
+
+<span class="n">SECTIONS</span> <span class="p">{</span>
+            <span class="o">/*</span> <span class="n">Load</span> <span class="n">the</span> <span class="n">kernel</span> <span class="n">at</span> <span class="n">this</span> <span class="n">address</span><span class="p">:</span> <span class="s2">&quot;.&quot;</span> <span class="n">means</span> <span class="n">the</span> <span class="n">current</span> <span class="n">address</span> <span class="o">*/</span>
+            <span class="o">.</span> <span class="o">=</span> <span class="mh">0xC0100000</span><span class="p">;</span>
+
+            <span class="o">.</span><span class="n">text</span> <span class="p">:</span> <span class="p">{</span>
+                        <span class="o">*</span><span class="p">(</span><span class="o">.</span><span class="n">text</span> <span class="o">.</span><span class="n">stub</span> <span class="o">.</span><span class="n">text</span><span class="o">.*</span> <span class="o">.</span><span class="n">gnu</span><span class="o">.</span><span class="n">linkonce</span><span class="o">.</span><span class="n">t</span><span class="o">.*</span><span class="p">)</span>
+            <span class="p">}</span>
+</pre></div>
+</div>
+<p>这意味着lab2中通过ld工具形成的ucore的起始虚拟地址从0xC0100000开始，注意：这个地址也是虚拟地址。入口函数为kern_entry函数（在kern/init/entry.S中）。这与lab1有很大差别。但其实在lab1和lab2中，bootloader把ucore都放在了起始物理地址为0x100000的物理内存空间。这实际上说明了ucore在lab1和lab2中采用的地址映射不同。lab2在不同阶段有不同的虚拟地址、线性地址以及物理地址之间的映射关系。</p>
+<p>也请注意，这个起始虚拟地址的变化其实并不会影响一般的跳转和函数调用，因为它们实际上是相对跳转。但是，对于绝对寻址的全局变量的引用，就需要用REALLOC宏进行一些运算来确保地址是正确的。注意到这一点可能有助于您理解下面几个阶段的某些代码，以及理解为什么这样做不会出错。</p>
+<p><strong>第一个阶段</strong>（开启保护模式，创建启动段表）是bootloader阶段，即从bootloader的start函数（在boot/bootasm.S中）到执行ucore
+kernel的kern_entry函数之前，其虚拟地址、线性地址以及物理地址之间的映射关系与lab1的一样，即：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lab2</span> <span class="n">stage</span> <span class="mi">1</span><span class="p">:</span> <span class="n">virt</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">linear</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">phy</span> <span class="n">addr</span>
+</pre></div>
+</div>
+<p><strong>第二个阶段</strong>（创建初始页目录表，开启分页模式）从kern_entry函数开始，到pmm_init函数被执行之前。</p>
+<p>编译好的ucore自带了一个设置好的页目录表和相应的页表，将0~4M的线性地址一一映射到物理地址。</p>
+<p>了解了一一映射的二级页表结构后，接下来就要使能分页机制了，这主要是通过几条汇编指令（在kern/init/entry.S中）实现的，主要做了两件事：</p>
+<ol class="arabic simple">
+<li><p>通过<code class="docutils literal notranslate"><span class="pre">movl</span> <span class="pre">%eax,</span> <span class="pre">%cr3</span></code>指令把页目录表的起始地址存入CR3寄存器中；</p></li>
+<li><p>通过<code class="docutils literal notranslate"><span class="pre">movl</span> <span class="pre">%eax,</span> <span class="pre">%cr0</span></code>指令把cr0中的CR0_PG标志位设置上。</p></li>
+</ol>
+<p>执行完这几条指令后，计算机系统进入了分页模式！虚拟地址、线性地址以及物理地址之间的临时映射关系为：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lab2</span> <span class="n">stage</span> <span class="mi">2</span> <span class="n">before</span><span class="p">:</span>
+    <span class="n">virt</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">linear</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">phy</span> <span class="n">addr</span> <span class="c1"># 线性地址在0~4MB之内三者的映射关系</span>
+    <span class="n">virt</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">linear</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">phy</span> <span class="n">addr</span> <span class="o">+</span> <span class="mh">0xC0000000</span> <span class="c1"># 线性地址在0xC0000000~0xC0000000+4MB之内三者的映射关系</span>
+</pre></div>
+</div>
+<p>可以看到，其实仅仅比第一个阶段增加了下面一行的0xC0000000偏移的映射，并且作用范围缩小到了0<sub>4M。在下一个节点，会将作用范围继续扩充到0</sub>KMEMSIZE。</p>
+<p>实际上这种映射限制了内核的大小。当内核大小超过预期的4MB
+（实际上是3M，因为内核从
+0x100000开始编址）就可能导致打开分页之后内核crash，在某些试验中，也的确出现了这种情况。解决方法同样简单，就是正确填充更多的页目录项即可。</p>
+<p>此时的内核（EIP）还在0~4M的低虚拟地址区域运行，而在之后，这个区域的虚拟内存是要给用户程序使用的。为此，需要使用一个绝对跳转来使内核跳转到高虚拟地址（代码在kern/init/entry.S中）：</p>
+<div class="highlight-asm notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="c1"># update eip</span>
+<span class="w">    </span><span class="c1"># now, eip = 0x1.....</span>
+<span class="w">    </span><span class="nf">leal</span><span class="w"> </span><span class="no">next</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># set eip = KERNBASE + 0x1.....</span>
+<span class="w">    </span><span class="nf">jmp</span><span class="w"> </span><span class="p">*</span><span class="nv">%eax</span><span class="w"></span>
+<span class="nl">next:</span><span class="w"></span>
+</pre></div>
+</div>
+<p>跳转完毕后，通过把boot_pgdir[0]对应的第一个页目录表项（0~4MB）清零来取消了临时的页映射关系：</p>
+<div class="highlight-asm notranslate"><div class="highlight"><pre><span></span><span class="c1"># unmap va 0 ~ 4M, it&#39;s temporary mapping</span>
+<span class="nf">xorl</span><span class="w"> </span><span class="nv">%eax</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span><span class="w"></span>
+<span class="nf">movl</span><span class="w"> </span><span class="nv">%eax</span><span class="p">,</span><span class="w"> </span><span class="no">__boot_pgdir</span><span class="w"></span>
+</pre></div>
+</div>
+<p>最终，离开这个阶段时，虚拟地址、线性地址以及物理地址之间的映射关系为：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lab2</span> <span class="n">stage</span> <span class="mi">2</span><span class="p">:</span> <span class="n">virt</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">linear</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">phy</span> <span class="n">addr</span> <span class="o">+</span> <span class="mh">0xC0000000</span> <span class="c1"># 线性地址在0~4MB之内三者的映射关系</span>
+</pre></div>
+</div>
+<p>总结来看，这一阶段的目的就是更新映射关系的同时将运行中的内核（EIP）从低虚拟地址“迁移”到高虚拟地址，而不造成伤害。</p>
+<p>不过，这还不是我们期望的映射关系，因为它仅仅映射了0~4MB。对于段表而言，也缺少了运行ucore所需的用户态段描述符和TSS（段）描述符相应表项。</p>
+<p><strong>第三个阶段</strong>（完善段表和页表）从pmm_init函数被调用开始。pmm_init函数将页目录表项补充完成（从0<sub>4M扩充到0</sub>KMEMSIZE）。然后，更新了段映射机制，使用了一个新的段表。这个新段表除了包括内核态的代码段和数据段描述符，还包括用户态的代码段和数据段描述符以及TSS（段）的描述符。理论上可以在第一个阶段，即bootloader阶段就将段表设置完全，然后在此阶段继续使用，但这会导致内核的代码和bootloader的代码产生过多的耦合，于是就有了目前的设计。</p>
+<p>这时形成了我们期望的虚拟地址、线性地址以及物理地址之间的映射关系：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">lab2</span> <span class="n">stage</span> <span class="mi">3</span><span class="p">:</span> <span class="n">virt</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">linear</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">phy</span> <span class="n">addr</span> <span class="o">+</span> <span class="mh">0xC0000000</span>
+</pre></div>
+</div>
+<p>段表相应表项和TSS也被设置妥当。</p>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, CL
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script kind="utterances">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addUtterances = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://utteranc.es/client.js";
+    script.async = "async";
+
+    script.setAttribute("repo", "LearningOS/uCore-Tutorial-Guide-2022S");
+    script.setAttribute("issue-term", "pathname");
+    script.setAttribute("theme", "github-light");
+    script.setAttribute("label", "comments");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.section");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addUtterances);
+</script>
+    <script src="../_static/translations.js"></script>
+    </body>
+</html>

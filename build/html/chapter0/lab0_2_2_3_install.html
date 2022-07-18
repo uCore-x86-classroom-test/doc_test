@@ -1,0 +1,554 @@
+<!doctype html>
+<html class="no-js" lang="zh-CN">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="索引" href="../genindex.html" /><link rel="search" title="搜索" href="../search.html" />
+
+    <meta name="generator" content="sphinx-5.0.2, furo 2022.06.21"/>
+        <title>安装使用Linux实验环境（适合希望自己安装Linux系统的同学） - uCore-Tutorial-Guide-2022S 0.1 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../_static/my_style.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">uCore-Tutorial-Guide-2022S 0.1 文档</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  
+  <span class="sidebar-brand-text">uCore-Tutorial-Guide-2022S 0.1 文档</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder=搜索 name="q" aria-label="搜索">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="linux-linux">
+<h1>安装使用Linux实验环境（适合希望自己安装Linux系统的同学）<a class="headerlink" href="#linux-linux" title="Permalink to this heading">#</a></h1>
+<p>这里我们主要以Ubuntu Linux 14.04（64
+bit）作为整个实验的系统软件环境。首先我们需要安装Ubuntu Linux 14.04。</p>
+<p><strong>使用Linux</strong>
+在实验过程中，我们需要了解基于命令行方式的编译、调试、运行操作系统的实验方法。为此，需要了解基本的Linux命令行使用。</p>
+<p><strong>命令模式的基本结构和概念</strong>
+Ubuntu是图形界面友好和易操作的linux发行版，但有时只需执行几条简单的指令就可以完成繁琐的鼠标点击才能完成的操作。linux的命令行操作模式功能可以实现你需要的所有操作。简单的说，命令行就是基于字符命令的用户界面，也被称为文本操作模式。绝大多数情况下，
+用户通过输入一行或多行命令直接与计算机互动，来实现对计算机的操作。</p>
+<p><strong>如何进入命令模式</strong> 假设使用默认的图形界面为GNOME的任意版本Ubuntu
+Linux。点击GNOME菜单-&gt;附件-&gt;终端，就可以启动名为gnome-terminal程序，从而可以在此软件界面中进行命令行操作。
+打开gnome-terminal程序后你首先可能会注意到类似下面的界面：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>chy@chyhome-PC:~$ ls
+file1.txt  file2.txt file3.txt tools
+</pre></div>
+</div>
+<p>你所看到的这些被称为命令终端提示符，它表示计算机已就绪，正在等待着用户输入操作指令。以我的屏幕画面为例，“chy”是当前所登录的用户名，“laptop”是这台计算机的主机名，“~”表示当前目录。此时输入任何指令按回车之后该指令将会提交到计算机运行，比如你可以输入命令：ls
+再按下回车：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="p">[</span><span class="n">ENTER</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><em>注意</em>：[ENTER]是指输入完ls后按下回车键，而不是叫你输入这个单词，ls这个命令将会列出你当前所在目录里的所有文件和子目录列表。</p>
+<p>下面介绍bash shell程序的基本使用方法，它是ubuntu缺省的外壳程序。</p>
+<p><strong>常用指令</strong></p>
+<ol class="arabic">
+<li><p>查询文件列表：(ls)</p>
+<p><a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ ls file1.txt file2.txt file3.txt tools</p>
+</li>
+</ol>
+<p>ls命令默认状态下将按首字母升序列出你当前文件夹下面的所有内容，但这样直接运行所得到的信息也是比较少的，通常它可以结合以下这些参数运行以查询更多的信息：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">/</span>        <span class="c1"># 将列出根目录&#39;/&#39;下的文件清单.如果给定一个参数，则命令行会把该参数当作命令行的工作目录。换句话说，命令行不再以当前目录为工作目录。</span>
+<span class="n">ls</span> <span class="o">-</span><span class="n">l</span>       <span class="c1"># 将给你列出一个更详细的文件清单.</span>
+<span class="n">ls</span> <span class="o">-</span><span class="n">a</span>       <span class="c1"># 将列出包括隐藏文件(以.开头的文件)在内的所有文</span>
+</pre></div>
+</div>
+<p>件. ]ls -h # 将以KB/MB/GB的形式给出文件大小,而不是以纯粹的Bytes.</p>
+<ol class="arabic" start="2">
+<li><p>查询当前所在目录：(pwd)</p>
+<p><a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ pwd /home/chy</p>
+</li>
+<li><p>进入其他目录：(cd) <a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ pwd /home/chy <a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$
+cd /root/ <a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ pwd /root</p></li>
+</ol>
+<p>上面例子中，当前目录原来是/home/chy,执行cd
+/root/之后再运行pwd可以发现，当前目录已经改为/root了。</p>
+<ol class="arabic" start="4">
+<li><p>在屏幕上输出字符： (echo)</p>
+<p><a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ echo “Hello World” Hello World</p>
+</li>
+</ol>
+<p>这是一个很有用的命令，它可以在屏幕上输入你指定的参数(“”号中的内容)，当然这里举的这个例子中它没有多大的实际意义，但随着你对LINUX指令的不断深入，就会发现它的价值所在。</p>
+<ol class="arabic" start="5">
+<li><p>显示文件内容：cat</p>
+<p><a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ cat file1.txt Roses are red. Violets are blue, and
+you have the bird-flue!</p>
+</li>
+</ol>
+<p>也可以使用less或more来显示比较大的文本文件内容。</p>
+<ol class="arabic" start="6">
+<li><p>复制文件： cp</p>
+<p><a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ cp file1.txt file1_copy.txt <a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ cat
+file1_copy.txt Roses are red. Violets are blue, and you have the
+bird-flue!</p>
+</li>
+<li><p>移动文件：mv</p>
+<p><a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ ls file1.txt file2.txt <a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ mv
+file1.txt new_file.txt <a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ ls file2.txt new_file.txt</p>
+</li>
+</ol>
+<p><em>注意</em>：在命令操作时系统基本上不会给你什么提示，当然，绝大多数的命令可以通过加上一个参数-v来要求系统给出执行命令的反馈信息；</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>chy@chyhome-PC:~$ mv -v file1.txt new_file.txt
+`file1.txt&#39; -&gt; `new_file.txt&#39;
+</pre></div>
+</div>
+<ol class="arabic" start="8">
+<li><p>建立一个空文本文件：touch</p>
+<p><a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ ls file1.txt <a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ touch tempfile.txt
+<a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ ls file1.txt tempfile.txt</p>
+</li>
+<li><p>建立一个目录：mkdir</p>
+<p><a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ ls file1.txt tempfile.txt <a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ mkdir
+test_dir <a class="reference external" href="mailto:chy&#37;&#52;&#48;chyhome-PC">chy<span>&#64;</span>chyhome-PC</a>:~$ ls file1.txt tempfile.txt test_dir</p>
+</li>
+<li><p>删除文件/目录：rm</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>chy@chyhome-PC:~$ ls -p
+file1.txt
+tempfile.txt
+test_dir/
+chy@chyhome-PC:~$ rm -i tempfile.txt
+rm: remove regular empty file `test.txt&#39;? y
+chy@chyhome-PC:~$ ls -p
+file1.txt
+test_dir/
+chy@chyhome-PC:~$ rm test_dir
+rm: cannot remove `test_dir&#39;: Is a directory
+chy@chyhome-PC:~$ rm -R test_dir
+chy@chyhome-PC:~$ ls -p
+file1.txt
+</pre></div>
+</div>
+<p>在上面的操作：首先我们通过ls命令查询可知当前目下有两个文件和一个文件夹；</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>[1] 你可以用参数 -p来让系统显示某一项的类型，比如是文件/文件夹/快捷链接等等；
+[2] 接下来我们用rm -i尝试删除文件，-i参数是让系统在执行删除操作前输出一条确认提示；i(interactive)也就是交互性的意思；
+[3] 当我们尝试用上面的命令去删除一个文件夹时会得到错误的提示，因为删除文件夹必须使用-R(recursive,循环）参数
+</pre></div>
+</div>
+<p>特别提示：在使用命令操作时，系统假设你很明确自己在做什么，它不会给你太多的提示，比如你执行rm
+-Rf
+/，它将会删除你硬盘上所有的东西，并且不会给你任何提示，所以，尽量在使用命令时加上-i的参数，以让系统在执行前进行一次确认，防止你干一些蠢事。如
+果你觉得每次都要输入-i太麻烦，你可以执行以下的命令，让－i成为默认参数：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">alias</span> <span class="n">rm</span><span class="o">=</span><span class="s1">&#39;rm -i&#39;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="11">
+<li><p>查询当前进程：ps</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>chy@chyhome-PC:~$ ps
+PID TTY          TIME CMD
+21071 pts/1    00:00:00 bash
+22378 pts/1    00:00:00 ps
+</pre></div>
+</div>
+<p>这条命令会例出你所启动的所有进程；</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ps</span> <span class="o">-</span><span class="n">a</span>       <span class="c1">#可以例出系统当前运行的所有进程，包括由其他用户启动的进程；</span>
+<span class="n">ps</span> <span class="n">auxww</span>    <span class="c1">#是一条相当人性化的命令，它会例出除一些很特殊进程以外的所有进程，并会以一个高可读的形式显示结果，每一个进程都会有较为详细的解释；</span>
+</pre></div>
+</div>
+<p>基本命令的介绍就到此为止，你可以访问网络得到更加详细的Linux命令介绍。</p>
+<p><strong>控制流程</strong> (1) 输入/输出</p>
+<p>input用来读取你通过键盘（或其他标准输入设备）输入的信息，output用于在屏幕（或其他标准输出设备）上输出你指定的输出内容.另外还有一些标准的出错提示也是通过这个命令来实现的。通常在遇到操作错误时，系统会自动调用这个命令来输出标准错误提示；</p>
+<p>我们能重定向命令中产生的输入和输出流的位置。</p>
+<ol class="arabic simple" start="2">
+<li><p>重定向</p></li>
+</ol>
+<p>如果你想把命令产生的输出流指向一个文件而不是（默认的）终端，你可以使用如下的语句：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>chy@chyhome-PC:~$ ls &gt;file4.txt
+chy@chyhome-PC:~$ cat file4.txt
+file1.txt  file2.txt file3.txt
+</pre></div>
+</div>
+<p>以上例子将创建文件file4.txt如果file4.txt不存在的话。注意：如果file4.txt已经存在，那么上面的命令将复盖文件的内容。如果你想将内容添加到已存在的文件内容的最后，那你可以用下面这个语句：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">command</span> <span class="o">&gt;&gt;</span> <span class="n">filename</span>
+</pre></div>
+</div>
+<p>示例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>chy@chyhome-PC:~$ ls &gt;&gt; file4.txt
+chy@chyhome-PC:~$ cat file4.txt
+file1.txt  file2.txt file3.txt
+file1.txt  file2.txt file3.txt file4.txt
+</pre></div>
+</div>
+<p>在这个例子中，你会发现原有的文件中添加了新的内容。接下来我们会见到另一种重定向方式：我们将把一个文件的内容作为将要执行的命令的输入。以下是这个语句：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">command</span> <span class="o">&lt;</span> <span class="n">filename</span>
+</pre></div>
+</div>
+<p>示例:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>chy@chyhome-PC:~$ cat &gt; file5.txt
+a3.txt
+a2.txt
+file2.txt
+file1.txt
+&lt;Ctrl-D&gt;  # 这表示敲入Ctrl+D键
+chy@chyhome-PC:~$ sort &lt; file5.txt
+a2.txt
+a3.txt
+file1.txt
+file2.txt
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>管道</p></li>
+</ol>
+<p>Linux的强大之处在于它能把几个简单的命令联合成为复杂的功能，通过键盘上的管道符号’|’
+完成。现在，我们来排序上面的“grep”命令：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">grep</span> <span class="o">-</span><span class="n">i</span> <span class="n">command</span> <span class="o">&lt;</span> <span class="n">myfile</span> <span class="o">|</span> <span class="n">sort</span> <span class="o">&gt;</span> <span class="n">result</span><span class="o">.</span><span class="n">text</span>
+</pre></div>
+</div>
+<p>搜索 myfile 中的命令，将输出分类并写入分类文件到 result.text 。
+有时候用ls列出很多命令的时候很不方便 这时“｜”就充分利用到了 ls -l |
+less 慢慢看吧.</p>
+<ol class="arabic simple" start="4">
+<li><p>后台进程</p></li>
+</ol>
+<p>CLI
+不是系统的串行接口。您可以在执行其他命令时给出系统命令。要启动一个进程到后台，追加一个“&amp;”到命令后面。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sleep</span> <span class="mi">60</span> <span class="o">&amp;</span>
+<span class="n">ls</span>
+</pre></div>
+</div>
+<p>睡眠命令在后台运行，您依然可以与计算机交互。除了不同步启动命令以外，最好把
+‘&amp;’ 理解成 ‘;’。</p>
+<p>如果您有一个命令将占用很多时间，您想把它放入后台运行，也很简单。只要在命令运行时按下ctrl-z，它就会停止。然后键入
+bg使其转入后台。fg 命令可使其转回前台。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sleep</span> <span class="mi">60</span>
+<span class="o">&lt;</span><span class="n">ctrl</span><span class="o">-</span><span class="n">z</span><span class="o">&gt;</span> <span class="c1"># 这表示敲入Ctrl+Z键</span>
+<span class="n">bg</span>
+<span class="n">fg</span>
+</pre></div>
+</div>
+<p>最后，您可以使用 ctrl-c 来杀死一个前台进程。</p>
+<p><strong>环境变量</strong></p>
+<p>特殊变量。PATH, PS1, …</p>
+<ol class="arabic simple">
+<li><p>不显示中文</p></li>
+</ol>
+<p>可通过执行如下命令避免显示乱码中文。在一个shell中，执行：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export LANG=””
+</pre></div>
+</div>
+<p>这样在这个shell中，output信息缺省时英文。</p>
+<p><strong>获得软件包</strong></p>
+<ol class="arabic simple">
+<li><p>命令行获取软件包</p></li>
+</ol>
+<p>Ubuntu 下可以使用 apt-get 命令，apt-get 是一条 Linux 命令行命令，适用于
+deb
+包管理式的操作系统，主要用于自动从互联网软件库中搜索、安装、升级以及卸载软件或者操作系统。一般需要
+root 执行权限，所以一般跟随 sudo 命令，如：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">gcc</span> <span class="p">[</span><span class="n">ENTER</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>常见的以及常用的 apt 命令有：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>apt-get install &lt;package&gt;
+    下载 &lt;package&gt; 以及所依赖的软件包，同时进行软件包的安装或者升级。
+apt-get remove &lt;package&gt;
+    移除 &lt;package&gt; 以及所有依赖的软件包。
+apt-cache search &lt;pattern&gt;
+    搜索满足 &lt;pattern&gt; 的软件包。
+apt-cache show/showpkg &lt;package&gt;
+    显示软件包 &lt;package&gt; 的完整描述。
+</pre></div>
+</div>
+<p>例如：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>chy@chyhome-PC:~$apt-cache search gcc
+gcc-4.8 - The GNU C compiler
+gcc-4.8-base - The GNU Compiler Collection (base package)
+gcc-4.8-doc - Documentation for the GNU compilers (gcc, gobjc, g++)
+gcc-4.8-multilib - The GNU C compiler (multilib files)
+gcc-4.8-source - Source of the GNU Compiler Collection
+gcc-4.8-locales - The GNU C compiler (native language support files)
+chy@chyhome-PC:~$
+</pre></div>
+</div>
+<ol class="arabic" start="2">
+<li><p>图形界面软件包获取 新立得软件包管理器，是 Ubuntu
+下面管理软件包得图形界面程序，相当于命令行中得 apt
+命令。进入方法可以是</p>
+<p>菜单栏 &gt; 系统管理 &gt; 新立得软件包管理器 (System &gt; Administration &gt;
+Synaptic Package Manager)</p>
+</li>
+</ol>
+<p>使用更新管理器可以通过标记选择适当的软件包进行更新操作。</p>
+<ol class="arabic simple" start="3">
+<li><p>配置升级源</p></li>
+</ol>
+<p>Ubuntu的软件包获取依赖升级源，可以通过修改 “/etc/apt/sources.list”
+文件来修改升级源（需要 root 权限）；或者修改新立得软件包管理器中 “设置 &gt;
+软件库”。</p>
+<p><strong>查找帮助文件</strong> Ubuntu 下提供 man 命令以完成帮助手册得查询。man 是
+manual 的缩写，通过 man 命令可以对 Linux
+下常用命令、安装软件、以及C语言常用函数等进行查询，获得相关帮助。</p>
+<p>例如：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>cchy@chyhome-PC:~$man printf
+PRINTF(1)                 BSD General Commands Manual                   PRINTF(1)
+
+NAME
+     printf -- formatted output
+
+SYNOPSIS
+     printf format [arguments ...]
+
+DESCRIPTION
+     The printf utility formats and prints its arguments, after the first, under control of the format. The format is a character string which contains three types of objects: plain characters, which are simply copied to standard output, character escape sequences which are converted and copied to the standard output, and format specifications, each of which causes ...
+           ...
+     The characters and their meanings are as follows:
+           \e      Write an &lt;escape&gt; character.
+           \a      Write a &lt;bell&gt; character.
+           ...
+</pre></div>
+</div>
+<p>通常可能会用到的帮助文件例如：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gcc</span><span class="o">-</span><span class="n">doc</span> <span class="n">cpp</span><span class="o">-</span><span class="n">doc</span> <span class="n">glibc</span><span class="o">-</span><span class="n">doc</span>
+</pre></div>
+</div>
+<p>上述帮助文件可以通过 apt-get 命令或者软件包管理器获得。获得以后可以通过
+man 命令进行命令或者参数查询。</p>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, CL
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    <script kind="utterances">
+
+    var commentsRunWhenDOMLoaded = cb => {
+    if (document.readyState != 'loading') {
+        cb()
+    } else if (document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', cb)
+    } else {
+        document.attachEvent('onreadystatechange', function() {
+        if (document.readyState == 'complete') cb()
+        })
+    }
+}
+
+var addUtterances = () => {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src = "https://utteranc.es/client.js";
+    script.async = "async";
+
+    script.setAttribute("repo", "LearningOS/uCore-Tutorial-Guide-2022S");
+    script.setAttribute("issue-term", "pathname");
+    script.setAttribute("theme", "github-light");
+    script.setAttribute("label", "comments");
+    script.setAttribute("crossorigin", "anonymous");
+
+    sections = document.querySelectorAll("div.section");
+    if (sections !== null) {
+        section = sections[sections.length-1];
+        section.appendChild(script);
+    }
+}
+commentsRunWhenDOMLoaded(addUtterances);
+</script>
+    <script src="../_static/translations.js"></script>
+    </body>
+</html>
