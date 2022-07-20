@@ -5,7 +5,8 @@
 .. toctree::
    :hidden:
    :maxdepth: 4
-
+   
+   setupenv.rst
    lab0_2_2_1_lab_steps.rst
    lab0_2_2_2_vm_experiment.rst
    lab0_2_2_3_install.rst
