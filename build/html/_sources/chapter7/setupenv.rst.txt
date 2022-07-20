@@ -16,25 +16,8 @@ classroom配置
 
    5.进入到实验分支 git checkout labx
 
-   6.获取自动测试脚本以及环境配置脚本sh setup.sh
-
-   6.配置实验运行环境(安装qemu以及gcc)  ubuntu环境下执行make setupenv
+   6.获取自动测试脚本以及环境配置脚本sh setup.sh 这个脚本同时也会配置实验运行环境(安装qemu以及gcc)
    
-   7.在github codespace中需要手动安装gcc
-
-   在github codespace环境中请手动把下面内容添加到 /etc/apt/sources.list
-
-   deb http://dk.archive.ubuntu.com/ubuntu/ xenial main
-   
-   deb http://dk.archive.ubuntu.com/ubuntu/ xenial universe
-
-   然后执行 
-
-   sudo apt update
-   
-   sudo apt install -y gcc-4.8
-
-
    7.然后就可以基于在线vscode进行开发、运行、提交等完整的实验过程了。
 
    8.完成提交后会触发classroom提供的自动测试功能，你可以点击仓库名下边的“Actions”标签查看自动测试的结果，第一次提交触发自动测试可能需要执行5-7分钟，随后的提交所触发的自动测试则不需要这么长的时间。
